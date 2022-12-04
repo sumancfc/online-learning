@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const { hashPassword, comparePassword } = require("../utils/auth");
+const { sendVerifyEmail } = require("../utils/emailVerify");
 
 //user registration
 exports.register = async (req, res) => {
@@ -22,7 +23,12 @@ exports.register = async (req, res) => {
       password: passwordHashed,
     }).save();
     //return success response
-    return res.status(201).json({ ok: true });
+    if (user) {
+      //send verify email to user
+      await sendVerifyEmail(user._id, name, email);
+
+      return res.status(201).json({ ok: true });
+    }
   } catch (err) {
     console.log(err);
     return res.status(400).json({ error: "Error. Try Again!!" });
@@ -56,6 +62,23 @@ exports.login = async (req, res) => {
   } catch (err) {
     console.log(err);
     return res.status(400).json({ error: "Error. Try Again!!" });
+  }
+};
+
+exports.verifyMail = async (req, res) => {
+  try {
+    const updateInfo = await User.updateOne(
+      { _id: req.params.id },
+      { $set: { is_verified: true } }
+    );
+
+    console.log("Helllo");
+
+    console.log(updateInfo);
+    return res.json({ message: "Email Verified!!" });
+  } catch (err) {
+    console.log(err);
+    console.log("Error");
   }
 };
 

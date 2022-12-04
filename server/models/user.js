@@ -30,6 +30,10 @@ const userSchema = new Schema(
       default: ["Student"],
       enum: ["Student", "Instructor", "Admin"],
     },
+    is_verified: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
