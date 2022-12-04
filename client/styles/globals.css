@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap");
 @import "../public/css/fontAwesome5Pro.css";
 
 *,
@@ -12,7 +12,7 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: "Merriweather", serif;
+  font-family: "Poppins", sans-serif;
   font-size: 1em;
   font-weight: 400;
 }
@@ -30,6 +30,54 @@ p {
   margin: 0;
 }
 
+.pt-8 {
+  padding-top: 80px;
+}
+
+.pb-8 {
+  padding-bottom: 80px;
+}
+
+/* Signup Area */
+.signup-area .section-title {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #0e1133;
+  text-transform: capitalize;
+  letter-spacing: 0.5px;
+}
+
+.signup-form label {
+  color: #0e1133;
+}
+
+.signup-form .signup-input {
+  position: relative;
+}
+
+.signup-form .signup-input input {
+  height: 60px;
+  line-height: 52px;
+  padding: 0 60px;
+  box-shadow: 0px 1px 4px 0px rgba(8, 0, 42, 0.2);
+}
+
+.signup-form .signup-input input:focus {
+  outline: none;
+  background: #fff;
+  border: 2px solid #2b4eff;
+}
+
+.signup-form .signup-input i {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 25px;
+  font-size: 1rem;
+  color: gray;
+}
+
+/* Footer Css */
 footer {
   background: #000;
   color: #fff;
