@@ -1,33 +1,41 @@
 import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import {
+  AiOutlineUserAdd,
+  AiOutlineMail,
+  AiFillEyeInvisible,
+  AiOutlineLoading3Quarters,
+} from "react-icons/ai";
 
 const SignUp = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (password !== confirmPassword) {
-      toast.error("Password doesnot match!!!");
-    }
 
-    await axios
-      .post(`http://localhost:5000/api/v1/register`, {
+    try {
+      if (password !== confirmPassword) {
+        return toast.error("Password doesnot match!!!");
+      }
+      setLoading(true);
+
+      await axios.post(`http://localhost:5000/api/v1/register`, {
         name,
         email,
         password,
-      })
-      .then((response) => {
-        toast.success("User register successful. Please verify your email.");
-        console.log(response.data.ok);
-      })
-      .catch((err) => {
-        //  console.log(error.response.data);
-        toast.error(err.response.data.error);
       });
+
+      toast.success("User register successful. Please verify your email.");
+      setLoading(false);
+    } catch (err) {
+      toast.error(err.response.data.error);
+      setLoading(false);
+    }
   };
 
   return (
@@ -50,7 +58,7 @@ const SignUp = () => {
                       Full Name
                     </label>
                     <div className='signup-input'>
-                      <i className='fas fa-user' />
+                      <AiOutlineUserAdd />
                       <input
                         type='text'
                         className='form-control'
@@ -68,7 +76,7 @@ const SignUp = () => {
                       Email
                     </label>
                     <div className='signup-input'>
-                      <i className='fas fa-envelope' />
+                      <AiOutlineMail />
                       <input
                         type='email'
                         className='form-control'
@@ -87,7 +95,7 @@ const SignUp = () => {
                       Password
                     </label>
                     <div className='signup-input'>
-                      <i className='fas fa-eye-slash' />
+                      <AiFillEyeInvisible />
                       <input
                         type='password'
                         className='form-control'
@@ -105,7 +113,7 @@ const SignUp = () => {
                       Confirm Password
                     </label>
                     <div className='signup-input'>
-                      <i className='fas fa-eye-slash' />
+                      <AiFillEyeInvisible />
                       <input
                         type='password'
                         className='form-control'
@@ -119,7 +127,7 @@ const SignUp = () => {
                   </div>
 
                   <button type='submit' className='btn btn-primary btn-lg'>
-                    Submit
+                    {loading ? <AiOutlineLoading3Quarters /> : "Submit"}
                   </button>
                 </form>
               </div>

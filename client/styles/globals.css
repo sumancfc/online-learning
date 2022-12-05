@@ -68,12 +68,12 @@ p {
   border: 2px solid #2b4eff;
 }
 
-.signup-form .signup-input i {
+.signup-form .signup-input svg {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   left: 25px;
-  font-size: 1rem;
+  font-size: 1.6rem;
   color: gray;
 }
 
