@@ -1,9 +1,9 @@
-import SignUp from "../components/Auth/Register";
+import SignIn from "../components/Auth/Login";
 
 const Register = () => {
   return (
     <>
-      <SignUp />
+      <SignIn />
     </>
   );
 };
