@@ -4,10 +4,13 @@ const fs = require("fs");
 const cors = require("cors");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
+const csrf = require("csrf");
 require("dotenv").config();
 
 //create express app
 const app = express();
+
+const csrfProtection = csrf({ cookie: true });
 
 //connect to database
 mongoose
@@ -24,6 +27,12 @@ app.use(morgan("dev"));
 fs.readdirSync("./routes").map((r) =>
   app.use("/api/v1", require(`./routes/${r}`))
 );
+
+app.use(csrfProtection);
+
+app.get("/api/v1/csrf-token", (req, res) => {
+  res.json({ csrfToken: req.csrfToken() });
+});
 
 //port define
 const port = process.env.PORT || 5000;

@@ -8,8 +8,9 @@ import {
   AiFillEyeInvisible,
   AiOutlineLoading3Quarters,
 } from "react-icons/ai";
+import SectionTitle from "../Section/Title";
 
-const SignUp = () => {
+const SignUp = ({ title }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -49,11 +50,7 @@ const SignUp = () => {
         <div className='container'>
           <div className='row d-flex justify-content-center'>
             {/* page title */}
-            <div className='col-md-8'>
-              <div className='section-title-wrapper mb-5 text-center'>
-                <h1 className='section-title'>Create a free Account</h1>
-              </div>
-            </div>
+            <SectionTitle titleName={title} />
             {/* auth form */}
             <div className='col-md-8'>
               <div className='auth-form'>

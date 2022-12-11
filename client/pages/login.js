@@ -3,7 +3,7 @@ import SignIn from "../components/Auth/Login";
 const Register = () => {
   return (
     <>
-      <SignIn />
+      <SignIn title='Login' />
     </>
   );
 };

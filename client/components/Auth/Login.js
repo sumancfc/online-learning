@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import axios from "axios";
 import { toast } from "react-toastify";
 import {
@@ -7,11 +8,17 @@ import {
   AiFillEyeInvisible,
   AiOutlineLoading3Quarters,
 } from "react-icons/ai";
+import { Context } from "../../context";
+import SectionTitle from "../Section/Title";
 
-const SignIn = () => {
+const SignIn = ({ title }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const { state, dispatch } = useContext(Context);
+
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,15 +26,24 @@ const SignIn = () => {
     try {
       setLoading(true);
 
-      await axios.post(`${process.env.NEXT_PUBLIC_API}/login`, {
-        email,
-        password,
+      const { data } = await axios.post(
+        `${process.env.NEXT_PUBLIC_API}/login`,
+        {
+          email,
+          password,
+        }
+      );
+
+      dispatch({
+        type: "LOGIN",
+        payload: data,
       });
+
+      window.localStorage.setItem("user", JSON.stringify(data));
 
       toast.success("Login Success");
       setLoading(false);
-      setEmail("");
-      setPassword("");
+      router.push("/");
     } catch (err) {
       toast.error(err.response.data.error);
       setLoading(false);
@@ -40,11 +56,7 @@ const SignIn = () => {
         <div className='container'>
           <div className='row d-flex justify-content-center'>
             {/* page title */}
-            <div className='col-md-8'>
-              <div className='section-title-wrapper mb-5 text-center'>
-                <h1 className='section-title'>Login</h1>
-              </div>
-            </div>
+            <SectionTitle titleName={title} />
             {/* auth form */}
             <div className='col-md-8'>
               <div className='auth-form'>

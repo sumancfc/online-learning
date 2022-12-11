@@ -3,7 +3,7 @@ import SignUp from "../components/Auth/Register";
 const Register = () => {
   return (
     <>
-      <SignUp />
+      <SignUp title='Create a free Account' />
     </>
   );
 };
