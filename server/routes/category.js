@@ -3,7 +3,13 @@ const router = express.Router();
 
 const { runValidation } = require("../validators");
 const { categoryValidator } = require("../validators/category");
-const { createCategory, getAllCategories } = require("../controllers/catrgory");
+const {
+  createCategory,
+  getCategories,
+  getCategoryById,
+  updateCategory,
+  deleteCategory,
+} = require("../controllers/category");
 
 router.post(
   "/category/create",
@@ -11,6 +17,9 @@ router.post(
   runValidation,
   createCategory
 );
-router.get("/category/all", getAllCategories);
+router.get("/category/all", getCategories);
+router.get("/category/:id", getCategoryById);
+router.put("/category/:id", categoryValidator, runValidation, updateCategory);
+router.delete("/category/:id", deleteCategory);
 
 module.exports = router;
