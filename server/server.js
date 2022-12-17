@@ -4,7 +4,8 @@ const fs = require("fs");
 const cors = require("cors");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
-const csrf = require("csrf");
+const csrf = require("csurf");
+const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
 //create express app
@@ -21,6 +22,7 @@ mongoose
 //create middlewares
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 app.use(morgan("dev"));
 
 //route => all routes goes through this function

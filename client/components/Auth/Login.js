@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import axios from "axios";
@@ -16,9 +16,16 @@ const SignIn = ({ title }) => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const { state, dispatch } = useContext(Context);
+  const {
+    state: { user },
+    dispatch,
+  } = useContext(Context);
 
   const router = useRouter();
+
+  useEffect(() => {
+    if (user !== null) router.push("/");
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

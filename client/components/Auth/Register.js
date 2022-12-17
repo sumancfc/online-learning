@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import axios from "axios";
 import { toast } from "react-toastify";
 import {
@@ -8,6 +9,7 @@ import {
   AiFillEyeInvisible,
   AiOutlineLoading3Quarters,
 } from "react-icons/ai";
+import { Context } from "../../context";
 import SectionTitle from "../Section/Title";
 
 const SignUp = ({ title }) => {
@@ -16,6 +18,17 @@ const SignUp = ({ title }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const {
+    state: { user },
+    dispatch,
+  } = useContext(Context);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user !== null) router.push("/");
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

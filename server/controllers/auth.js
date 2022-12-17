@@ -92,3 +92,15 @@ exports.logout = async (req, res) => {
     return res.status(400).json({ error: "Error. Try Again!!" });
   }
 };
+
+//get the login user
+exports.currentUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).select("-password").exec();
+    console.log("Current User", user);
+    return res.status(200).json(user);
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({ error: "Error. Try Again!!" });
+  }
+};
