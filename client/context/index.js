@@ -51,16 +51,17 @@ const Provider = ({ children }) => {
       if (res.status === 401 && res.config && !res.config.__isRetryRequest) {
         return new Promise((resolve, reject) => {
           axios
-            .get("/api/v1/logout")
+            .get(`${process.env.NEXT_PUBLIC_API}/logout`)
             .then((data) => {
               // console.log(data)
               dispatch({ type: "LOGOUT" });
               window.localStorage.removeItem("user");
               router.push("/login");
+              console.log("Context API", data);
             })
             .catch((err) => {
-              // console.log("Axios Interceptors", err);
-              reject(err);
+              console.log("Axios Interceptors", err);
+              reject(error);
             });
         });
       }
@@ -73,8 +74,8 @@ const Provider = ({ children }) => {
       const { data } = await axios.get(
         `${process.env.NEXT_PUBLIC_API}/csrf-token`
       );
-      console.log(data);
-      axios.defaults.headers["X-CSRF-Token"] = data.getCsrfToken
+      // console.log(data);
+      axios.defaults.headers["X-CSRF-Token"] = data.getCsrfToken;
     };
     getCsrfToken();
   }, []);

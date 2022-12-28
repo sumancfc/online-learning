@@ -12,8 +12,8 @@ import { Context } from "../../context";
 import SectionTitle from "../Section/Title";
 
 const SignIn = ({ title }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("sumanstha999@gmail.com");
+  const [password, setPassword] = useState("sumancfc1905");
   const [loading, setLoading] = useState(false);
 
   const {
@@ -23,9 +23,9 @@ const SignIn = ({ title }) => {
 
   const router = useRouter();
 
-  useEffect(() => {
-    if (user !== null) router.push("/");
-  }, [user]);
+  // useEffect(() => {
+  //   if (user !== null) router.push("/");
+  // }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -50,7 +50,7 @@ const SignIn = ({ title }) => {
 
       toast.success("Login Success");
       setLoading(false);
-      router.push("/");
+      // router.push("/");
     } catch (err) {
       toast.error(err.response.data.error);
       setLoading(false);

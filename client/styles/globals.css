@@ -88,6 +88,9 @@ footer ul li {
   color: #a1a2ab;
 }
 
+.collapse.active {
+  display: block;
+}
 /* Media Query */
 /* for tablet view */
 @media only screen and (min-width: 768px) and (max-width: 991px) {
