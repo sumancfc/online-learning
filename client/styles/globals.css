@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap");
-@import "../public/css/fontAwesome5Pro.css";
+/* @import "../public/css/fontAwesome5Pro.css"; */
 
 *,
 *::before,
@@ -91,6 +91,14 @@ footer ul li {
 .collapse.active {
   display: block;
 }
+
+.search-btn {
+  border: none;
+  width: calc(100% - 1rem);
+  outline: none;
+  padding: 6px;
+}
+
 /* Media Query */
 /* for tablet view */
 @media only screen and (min-width: 768px) and (max-width: 991px) {

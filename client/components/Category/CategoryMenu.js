@@ -10,7 +10,7 @@ const CategoryMenu = () => {
 
   useEffect(() => {
     getCategories();
-  }, [categories]);
+  }, []);
 
   //get all courses category
   const getCategories = async () => {
@@ -32,18 +32,16 @@ const CategoryMenu = () => {
   useOnHoverOutside(dropdownRef, closeHoverMenu); // Call the hook
 
   return (
-    <div className=''>
-      <div className='' ref={dropdownRef}>
-        <a className='' href='#' onMouseOver={() => setMenuDropDownOpen(true)}>
+    <div>
+      <div ref={dropdownRef}>
+        <a href='#' onMouseOver={() => setMenuDropDownOpen(true)}>
           Categories
         </a>
         {isMenuDropDownOpen && (
           <ul className='position-absolute bg-white mb-0 p-3'>
             {categories.map((category) => (
               <li className='list-unstyled py-1' key={category._id}>
-                <Link className='' href={`${category.slug}`}>
-                  {category.name}
-                </Link>
+                <Link href={`${category.slug}`}>{category.name}</Link>
               </li>
             ))}
           </ul>

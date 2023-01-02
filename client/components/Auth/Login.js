@@ -23,9 +23,9 @@ const SignIn = ({ title }) => {
 
   const router = useRouter();
 
-  // useEffect(() => {
-  //   if (user !== null) router.push("/");
-  // }, [user]);
+  useEffect(() => {
+    if (user !== null) router.push("/");
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -50,7 +50,7 @@ const SignIn = ({ title }) => {
 
       toast.success("Login Success");
       setLoading(false);
-      // router.push("/");
+      router.push("/");
     } catch (err) {
       toast.error(err.response.data.error);
       setLoading(false);
