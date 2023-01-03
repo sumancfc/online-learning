@@ -49,6 +49,12 @@ exports.login = async (req, res) => {
 
     if (!matchPassword)
       return res.status(400).json({ error: "Password not matched" });
+
+    if (!user.is_verified)
+      return res.status(400).json({
+        error: "An email has been sent to your account. Please Verify.",
+      });
+
     //generate token
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "10d",
@@ -65,20 +71,19 @@ exports.login = async (req, res) => {
   }
 };
 
+//verify email
 exports.verifyMail = async (req, res) => {
   try {
-    const updateInfo = await User.updateOne(
-      { _id: req.params.id },
-      { $set: { is_verified: true } }
-    );
+    const user = await User.findOne({ id: req.params.id });
 
-    console.log("Helllo");
+    if (!user) return res.status(400).json({ error: "Invalid Link" });
 
-    console.log(updateInfo);
-    return res.json({ message: "Email Verified!!" });
+    await User.updateOne({}, { $set: { is_verified: true } });
+
+    return res.status(200).json({ message: "Email Verified!!" });
   } catch (err) {
     console.log(err);
-    console.log("Error");
+    return res.status(400).json({ error: "Internal Server Error" });
   }
 };
 

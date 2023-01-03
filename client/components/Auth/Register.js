@@ -13,10 +13,10 @@ import { Context } from "../../context";
 import SectionTitle from "../Section/Title";
 
 const SignUp = ({ title }) => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [name, setName] = useState("Suman");
+  const [email, setEmail] = useState("sumanstha999@gmail.com");
+  const [password, setPassword] = useState("sumancfc1905");
+  const [confirmPassword, setConfirmPassword] = useState("sumancfc1905");
   const [loading, setLoading] = useState(false);
 
   const {
@@ -39,7 +39,7 @@ const SignUp = ({ title }) => {
       }
       setLoading(true);
 
-      await axios.post(`${process.env.NEXT_PUBLIC_API}/register`, {
+      await axios.post(`api/v1/register`, {
         name,
         email,
         password,

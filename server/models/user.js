@@ -30,6 +30,10 @@ const userSchema = new Schema(
       default: ["Student"],
       enum: ["Student", "Instructor", "Admin"],
     },
+    resetPassword: {
+      data: String,
+      default: "",
+    },
     is_verified: {
       type: Boolean,
       default: false,

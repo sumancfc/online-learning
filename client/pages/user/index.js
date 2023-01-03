@@ -1,42 +1,17 @@
-import { useState, useContext, useEffect } from "react";
-import { useRouter } from "next/router";
-import axios from "axios";
+import { useContext } from "react";
+import UserRoute from "@/components/Routes/UserRoute";
 import { Context } from "../../context";
 
-const UserRoute = () => {
-  const [ok, setOk] = useState(false);
+const UserIndex = () => {
+  const {
+    state: { user },
+  } = useContext(Context);
 
-  // const {
-  //   state: { user },
-  // } = useContext(Context);
-
-  // console.log(user);
-
-  const router = useRouter();
-
-  // useEffect(() => {
-  //   getUser();
-  // }, []);
-
-  // //get the current login user
-  // const getUser = async () => {
-  //   try {
-  //     const { data } = await axios.get(
-  //       "http://localhost:5000/api/v1/current-user"
-  //     );
-
-  //     console.log("User Page", data);
-
-  //     console.log(data);
-  //     if (data.ok) setOk(true);
-  //   } catch (err) {
-  //     console.log(err);
-  //     setOk(false);
-  //     router.push(`${process.env.NEXT_PUBLIC_URL}/login`);
-  //   }
-  // };
-
-  return <h1>Hello From User</h1>;
+  return (
+    <UserRoute>
+      <h1 className='jumbotron text-center square'>User dashboard</h1>
+    </UserRoute>
+  );
 };
 
-export default UserRoute;
+export default UserIndex;

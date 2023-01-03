@@ -17,7 +17,7 @@ export const HeaderRight = () => {
   const logout = async () => {
     dispatch({ type: "LOGOUT" });
     window.localStorage.removeItem("user");
-    const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API}/logout`);
+    const { data } = await axios.get(`/api/v1/logout`);
 
     toast.success(data.message);
     router.push("/login");

@@ -15,9 +15,7 @@ const CategoryMenu = () => {
   //get all courses category
   const getCategories = async () => {
     try {
-      const { data } = await axios.get(
-        "http://localhost:5000/api/v1/category/all"
-      );
+      const { data } = await axios.get("api/v1/category/all");
       setCategories(data);
     } catch (err) {
       console.log(err);

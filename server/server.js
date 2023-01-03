@@ -20,14 +20,14 @@ mongoose
   .catch((err) => console.log("Database connection Error", err));
 
 //create middlewares
-// app.use(cors());
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 app.use(morgan("dev"));
 
-if (process.env.NODE_ENV === "development") {
-  app.use(cors({ origin: `${process.env.CLIENT_URL}` }));
-}
+// if (process.env.NODE_ENV === "development") {
+//   app.use(cors({ origin: `${process.env.CLIENT_URL}` }));
+// }
 
 //route => all routes goes through this function
 fs.readdirSync("./routes").map((r) =>

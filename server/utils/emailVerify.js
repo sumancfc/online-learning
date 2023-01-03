@@ -7,8 +7,8 @@ exports.sendVerifyEmail = async (userId, name, email) => {
       port: 587,
       secure: false,
       auth: {
-        user: "chelseasuman1905@gmail.com",
-        pass: "odkvruuylihnxgsb",
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD,
       },
     });
 
@@ -16,12 +16,7 @@ exports.sendVerifyEmail = async (userId, name, email) => {
       from: "Online Learning Platform",
       to: email,
       subject: "For Email Verification",
-      html:
-        "<p>Hi " +
-        name +
-        ', Please click here to <a href="http://127.0.0.1:5000/verify?id=' +
-        userId +
-        '">Verify</a> your mail.</p>',
+      html: `<p>Hi ${name} , Please click here to <a href="http://localhost:3000/emailVerify/${userId}" target="_blank">Verify</a> your mail.</p>`,
     };
 
     transporter.sendMail(mailOptions, (err, info) => {
