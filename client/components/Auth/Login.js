@@ -102,6 +102,10 @@ const SignIn = ({ title }) => {
                     </div>
                   </div>
 
+                  <Link href='/forgot-password' className='text-danger'>
+                    Forgot Password?
+                  </Link>
+
                   <button type='submit' className='btn btn-primary btn-lg'>
                     {loading ? <AiOutlineLoading3Quarters /> : "Login"}
                   </button>

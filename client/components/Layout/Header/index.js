@@ -26,7 +26,7 @@ const Header = () => {
           }`}
           id='navbarNavDropdown'
         >
-          {/* <CategoryMenu /> */}
+          <CategoryMenu />
           {/* Header Search */}
           <SearchForm />
 
