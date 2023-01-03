@@ -11,6 +11,8 @@ const {
   verifyMail,
   logout,
   currentUser,
+  forgotPassword,
+  resetPassword,
 } = require("../controllers/auth");
 
 router.post("/register", registerValidation, runValidation, register);
@@ -18,6 +20,8 @@ router.post("/login", loginValidation, runValidation, login);
 router.get("/verify/:id", verifyMail);
 router.get("/logout", logout);
 router.get("/current-user", requireSignin, currentUser);
+router.post("/forgot-password", forgotPassword);
+router.post("/reset-password", resetPassword);
 
 //export router
 module.exports = router;

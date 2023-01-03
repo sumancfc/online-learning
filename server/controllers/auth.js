@@ -1,7 +1,8 @@
 const jwt = require("jsonwebtoken");
+const { nanoid } = require("nanoid");
 const User = require("../models/user");
 const { hashPassword, comparePassword } = require("../utils/auth");
-const { sendVerifyEmail } = require("../utils/emailVerify");
+const { sendEmail } = require("../utils/sendEmail");
 
 //user registration
 exports.register = async (req, res) => {
@@ -22,10 +23,12 @@ exports.register = async (req, res) => {
       email,
       password: passwordHashed,
     }).save();
+
+    let message = `<p>Hi ${name} , Please click here to <a href="http://localhost:3000/emailVerify/${user._id}" target="_blank">Verify Your Email</a></p>`;
     //return success response
     if (user) {
       //send verify email to user
-      await sendVerifyEmail(user._id, name, email);
+      await sendEmail(email, "For Email Verification", message);
 
       return res.status(201).json({ ok: true });
     }
@@ -115,6 +118,57 @@ exports.currentUser = async (req, res) => {
     const user = await User.findById(req.user._id).select("-password").exec();
     console.log("Current User", user);
     return res.status(200).json({ ok: true });
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({ error: "Error. Try Again!!" });
+  }
+};
+
+//forgot password
+exports.forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const code = nanoid(6).toUpperCase();
+
+    console.log(email, code);
+
+    const user = await User.findOneAndUpdate(
+      { email },
+      { resetPassword: code }
+    );
+
+    if (!user) return res.status(400).json({ error: "User Not Found" });
+
+    let message = `Hi ${user.name} , Please, use this code to reset your password: <strong>${code}</strong>`;
+    //return success response
+    if (user) {
+      //send reset code to user
+      await sendEmail(email, "For Password Reset", message);
+
+      return res.status(200).json({ ok: true });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({ error: "Internal Server Error" });
+  }
+};
+
+//reset password
+exports.resetPassword = async (req, res) => {
+  try {
+    const { email, resetCode, newPassword } = req.body;
+    //hash plain password
+    const passwordHashed = await hashPassword(newPassword);
+
+    const user = await User.findOneAndUpdate(
+      {
+        email,
+        resetPassword: resetCode,
+      },
+      { resetPassword: "", password: passwordHashed }
+    ).exec();
+
+    if (user) return res.status(200).json({ ok: true });
   } catch (err) {
     console.log(err);
     return res.status(400).json({ error: "Error. Try Again!!" });

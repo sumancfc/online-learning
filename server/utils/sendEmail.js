@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
 
-exports.sendVerifyEmail = async (userId, name, email) => {
+exports.sendEmail = async (email, subject, message) => {
   try {
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
@@ -15,8 +15,8 @@ exports.sendVerifyEmail = async (userId, name, email) => {
     const mailOptions = {
       from: "Online Learning Platform",
       to: email,
-      subject: "For Email Verification",
-      html: `<p>Hi ${name} , Please click here to <a href="http://localhost:3000/emailVerify/${userId}" target="_blank">Verify</a> your mail.</p>`,
+      subject: subject,
+      html: message,
     };
 
     transporter.sendMail(mailOptions, (err, info) => {
