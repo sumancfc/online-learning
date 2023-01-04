@@ -2,6 +2,12 @@ const jwt = require("jsonwebtoken");
 const { nanoid } = require("nanoid");
 const User = require("../models/user");
 const { hashPassword, comparePassword } = require("../utils/auth");
+const {
+  verifyEmailMessage,
+  confirmEmailMessage,
+  passwordResetMessage,
+  passwordResetConfirmMessage,
+} = require("../utils/message");
 const { sendEmail } = require("../utils/sendEmail");
 
 //user registration
@@ -23,8 +29,9 @@ exports.register = async (req, res) => {
       email,
       password: passwordHashed,
     }).save();
+    //verify email message
+    const message = verifyEmailMessage(name, user._id);
 
-    let message = `<p>Hi ${name} , Please click here to <a href="http://localhost:3000/emailVerify/${user._id}" target="_blank">Verify Your Email</a></p>`;
     //return success response
     if (user) {
       //send verify email to user
@@ -79,9 +86,15 @@ exports.verifyMail = async (req, res) => {
   try {
     const user = await User.findOne({ id: req.params.id });
 
+    const { name, email } = user;
+
     if (!user) return res.status(400).json({ error: "Invalid Link" });
 
     await User.updateOne({}, { $set: { is_verified: true } });
+
+    const message = confirmEmailMessage(name);
+    //send confirm email to user
+    await sendEmail(email, "Welcome", message);
 
     return res.status(200).json({ message: "Email Verified!!" });
   } catch (err) {
@@ -130,8 +143,6 @@ exports.forgotPassword = async (req, res) => {
     const { email } = req.body;
     const code = nanoid(6).toUpperCase();
 
-    console.log(email, code);
-
     const user = await User.findOneAndUpdate(
       { email },
       { resetPassword: code }
@@ -139,11 +150,11 @@ exports.forgotPassword = async (req, res) => {
 
     if (!user) return res.status(400).json({ error: "User Not Found" });
 
-    let message = `Hi ${user.name} , Please, use this code to reset your password: <strong>${code}</strong>`;
+    let message = passwordResetMessage(user.name, code);
     //return success response
     if (user) {
       //send reset code to user
-      await sendEmail(email, "For Password Reset", message);
+      await sendEmail(email, "Code For Password Reset", message);
 
       return res.status(200).json({ ok: true });
     }
@@ -167,6 +178,10 @@ exports.resetPassword = async (req, res) => {
       },
       { resetPassword: "", password: passwordHashed }
     ).exec();
+
+    const message = passwordResetConfirmMessage(user.name);
+
+    await sendEmail(email, "Password Changed", message);
 
     if (user) return res.status(200).json({ ok: true });
   } catch (err) {
