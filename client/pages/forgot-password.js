@@ -5,6 +5,7 @@ import { Context } from "../context";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import axios from "axios";
 import { toast } from "react-toastify";
+import SectionTitle from "@/components/Section/Title";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -38,7 +39,7 @@ const ForgotPassword = () => {
     <div className='container my-5'>
       <div className='row d-flex justify-content-center'>
         <div className='col-md-6 card p-5'>
-          <h4>Forgot Password</h4>
+          <SectionTitle titleName={"Forgot Password"} />
           <p>
             If you forgot your password, well, then we’ll email you instructions
             to reset your password.

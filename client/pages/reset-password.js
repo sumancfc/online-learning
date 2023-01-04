@@ -5,6 +5,7 @@ import { Context } from "../context";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import axios from "axios";
 import { toast } from "react-toastify";
+import SectionTitle from "@/components/Section/Title";
 
 const ResetPassword = () => {
   const [email, setEmail] = useState("");
@@ -52,7 +53,7 @@ const ResetPassword = () => {
     <div className='container my-5'>
       <div className='row d-flex justify-content-center'>
         <div className='col-md-6 card p-5'>
-          <h4>Reset Password</h4>
+          <SectionTitle titleName={"Reset Password"} />
           <p>Please, check your email for the password reset code</p>
           <div className='auth-form pt-3 pb-4'>
             <form className='d-grid gap-3' onSubmit={handleSubmit}>
