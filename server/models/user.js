@@ -38,6 +38,9 @@ const userSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    stripe_account_id: "",
+    stripe_seller: {},
+    stripeSession: {},
   },
   { timestamps: true }
 );

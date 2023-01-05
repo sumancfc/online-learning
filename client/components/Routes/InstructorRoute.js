@@ -2,26 +2,26 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { ImSpinner9 } from "react-icons/im";
-import UserNav from "../Nav/UserNav";
+import InstructorNav from "../Nav/InstructorNav";
 
-const UserRoute = ({ children }) => {
+const InstructorRoute = ({ children }) => {
   const [ok, setOk] = useState(false);
 
   const router = useRouter();
 
   useEffect(() => {
-    getUser();
+    getCurrentInstructor();
   }, []);
 
   //get the current login user
-  const getUser = async () => {
+  const getCurrentInstructor = async () => {
     try {
-      const { data } = await axios.get("/api/v1/current-user");
+      const { data } = await axios.get("/api/v1/current-instructor");
       if (data.ok) setOk(true);
     } catch (err) {
       console.log(err);
       setOk(false);
-      router.push(`${process.env.NEXT_PUBLIC_URL}/login`);
+      router.push(`${process.env.NEXT_PUBLIC_URL}/`);
     }
   };
 
@@ -35,7 +35,7 @@ const UserRoute = ({ children }) => {
         <div className='container-fluid'>
           <div className='row'>
             <div className='col-md-2'>
-              <UserNav />
+              <InstructorNav />
             </div>
             <div className='col-md-10'>{children}</div>
           </div>
@@ -45,4 +45,4 @@ const UserRoute = ({ children }) => {
   );
 };
 
-export default UserRoute;
+export default InstructorRoute;

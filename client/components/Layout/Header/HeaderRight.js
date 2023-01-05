@@ -30,6 +30,25 @@ export const HeaderRight = () => {
         </Link>
 
         <MenuCart />
+
+        {user && user.role && user.role.includes("Instructor") ? (
+          <>
+            <Link
+              href={`${process.env.NEXT_PUBLIC_URL}/instructor/course/create`}
+              className='me-2'
+            >
+              Create a Course
+            </Link>
+          </>
+        ) : (
+          <Link
+            href={`${process.env.NEXT_PUBLIC_URL}/user/become-a-instructor`}
+            className='me-2'
+          >
+            Become a Instructor
+          </Link>
+        )}
+
         {user === null && (
           <>
             <Link

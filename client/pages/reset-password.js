@@ -1,10 +1,9 @@
 import { useState, useContext, useEffect } from "react";
-import Link from "next/link";
 import { useRouter } from "next/router";
-import { Context } from "../context";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { Context } from "../context";
 import SectionTitle from "@/components/Section/Title";
 
 const ResetPassword = () => {
@@ -97,7 +96,7 @@ const ResetPassword = () => {
                 </label>
                 <div className='auth-input'>
                   <input
-                    type='text'
+                    type='password'
                     className='form-control px-4'
                     id='newPassword'
                     value={newPassword}
@@ -114,7 +113,7 @@ const ResetPassword = () => {
                 </label>
                 <div className='auth-input'>
                   <input
-                    type='text'
+                    type='password'
                     className='form-control px-4'
                     id='confirmNewPassword'
                     value={confirmNewPassword}

@@ -84,16 +84,20 @@ exports.login = async (req, res) => {
 //verify email
 exports.verifyMail = async (req, res) => {
   try {
-    const user = await User.findOne({ id: req.params.id });
+    const id = req.params.id;
+    const trimmed_id = id.trim();
+    const user = await User.findById(trimmed_id).exec();
 
-    const { name, email } = user;
+    const { _id, name, email } = user;
 
-    if (!user) return res.status(400).json({ error: "Invalid Link" });
+    if (!user) {
+      return res.status(400).json({ error: "Invalid Link" });
+    }
 
-    await User.updateOne({}, { $set: { is_verified: true } });
+    await User.updateOne({ _id }, { $set: { is_verified: true } });
 
     const message = confirmEmailMessage(name);
-    //send confirm email to user
+    // //send confirm email to user
     await sendEmail(email, "Welcome", message);
 
     return res.status(200).json({ message: "Email Verified!!" });

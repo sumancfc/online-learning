@@ -13,10 +13,10 @@ import { Context } from "../../context";
 import SectionTitle from "../Section/Title";
 
 const SignUp = ({ title }) => {
-  const [name, setName] = useState("Suman");
-  const [email, setEmail] = useState("sumanstha999@gmail.com");
-  const [password, setPassword] = useState("sumancfc1905");
-  const [confirmPassword, setConfirmPassword] = useState("sumancfc1905");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   const {
