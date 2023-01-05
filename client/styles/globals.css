@@ -46,7 +46,8 @@ p {
   position: relative;
 }
 
-.auth-form .auth-input input {
+.auth-form .auth-input input,
+select {
   height: 60px;
   line-height: 52px;
   padding: 0 60px;
@@ -88,6 +89,10 @@ footer ul li {
   width: calc(100% - 1rem);
   outline: none;
   padding: 6px;
+}
+
+.active {
+  color: #0d6efd;
 }
 
 /* Media Query */

@@ -25,7 +25,10 @@ export const HeaderRight = () => {
   return (
     <>
       <div className='d-flex justify-content-between align-items-center gap-4'>
-        <Link href='/wishlist' className='p-3'>
+        <Link
+          href='/wishlist'
+          className={router.pathname === "/wishlist" ? "me-2 active" : "me-2"}
+        >
           <AiOutlineHeart className='fs-3' />
         </Link>
 
@@ -35,7 +38,11 @@ export const HeaderRight = () => {
           <>
             <Link
               href={`${process.env.NEXT_PUBLIC_URL}/instructor/course/create`}
-              className='me-2'
+              className={
+                router.pathname === "/instructor/course/create"
+                  ? "me-2 active"
+                  : "me-2"
+              }
             >
               Create a Course
             </Link>
@@ -43,7 +50,11 @@ export const HeaderRight = () => {
         ) : (
           <Link
             href={`${process.env.NEXT_PUBLIC_URL}/user/become-a-instructor`}
-            className='me-2'
+            className={
+              router.pathname === "/user/become-a-instructor"
+                ? "me-2 active"
+                : "me-2"
+            }
           >
             Become a Instructor
           </Link>
@@ -53,13 +64,17 @@ export const HeaderRight = () => {
           <>
             <Link
               href={`${process.env.NEXT_PUBLIC_URL}/login`}
-              className='me-2'
+              className={router.pathname === "/login" ? "me-2 active" : "me-2"}
             >
               Login
             </Link>
             <Link
               href={`${process.env.NEXT_PUBLIC_URL}/register`}
-              className='btn btn-primary me-2'
+              className={
+                router.pathname === "/register"
+                  ? "btn btn-primary me-2 active"
+                  : "btn btn-primary me-2"
+              }
             >
               Register
             </Link>
@@ -67,7 +82,7 @@ export const HeaderRight = () => {
         )}
 
         {user !== null && (
-          <button type='button' className='btn btn-secondary' onClick={logout}>
+          <button type='button' className='btn btn-danger' onClick={logout}>
             Logout
           </button>
         )}

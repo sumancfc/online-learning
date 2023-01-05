@@ -32,12 +32,12 @@ const UserRoute = ({ children }) => {
           <ImSpinner9 className='fs-1' />
         </div>
       ) : (
-        <div className='container-fluid'>
+        <div className='container-fluid my-4'>
           <div className='row'>
             <div className='col-md-2'>
               <UserNav />
             </div>
-            <div className='col-md-10'>{children}</div>
+            <div className='col-md-10 px-4'>{children}</div>
           </div>
         </div>
       )}

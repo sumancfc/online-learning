@@ -118,17 +118,6 @@ exports.logout = async (req, res) => {
   }
 };
 
-//auth middleware
-exports.authMiddleware = async (req, res, next) => {
-  const user = await User.findById({ _id: req.user._id });
-
-  if (!user) return res.status(400).json({ error: "User not found" });
-
-  req.profile = user;
-
-  next();
-};
-
 //get the login user
 exports.currentUser = async (req, res) => {
   try {
