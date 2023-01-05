@@ -1,5 +1,9 @@
 const AWS = require("aws-sdk");
 const { nanoid } = require("nanoid");
+const slugify = require("slugify");
+const Category = require("../models/category");
+const User = require("../models/user");
+const Course = require("../models/course");
 
 const awsConfig = {
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -10,6 +14,7 @@ const awsConfig = {
 
 const S3 = new AWS.S3(awsConfig);
 
+// course's image upload to aws s3
 exports.imageUploadToAWS = async (req, res) => {
   try {
     const { image } = req.body;
@@ -46,6 +51,7 @@ exports.imageUploadToAWS = async (req, res) => {
   }
 };
 
+// course's image remove from aws s3
 exports.imageRemoveFromAWS = async (req, res) => {
   try {
     const { image } = req.body;
@@ -65,5 +71,27 @@ exports.imageRemoveFromAWS = async (req, res) => {
   } catch (err) {
     console.log(err);
     return res.status(400).json({ error: "Failed to Remove Image. Try Again" });
+  }
+};
+
+// create course by instructor
+exports.createCourse = async (req, res) => {
+  try {
+    const courseExist = await Course.findOne({
+      slug: slugify(req.body.name.toLowerCase()),
+    });
+    courseExist && res.status(400).send("Course is Already Present");
+
+    const course = await new Course({
+      slug: slugify(req.body.name),
+      instructor: req.user._id,
+      ...req.body,
+    }).save();
+
+    console.log(course);
+    return res.status(200).json(course);
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send("Course Failed To Create");
   }
 };

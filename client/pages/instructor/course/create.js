@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import InstructorRoute from "@/components/Routes/InstructorRoute";
 import { useRouter } from "next/router";
 import Resizer from "react-image-file-resizer";
 import { toast } from "react-toastify";
-import SectionTitle from "@/components/Section/Title";
-import { AiOutlineLoading3Quarters, AiOutlineMail } from "react-icons/ai";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import axios from "axios";
+import SectionTitle from "@/components/Section/Title";
+import InstructorRoute from "@/components/Routes/InstructorRoute";
 import Avatar from "@/components/Avatar";
 
 const CreateCourse = () => {
@@ -40,7 +40,11 @@ const CreateCourse = () => {
 
   const children = [];
   for (let i = 9.99; i <= 100.99; i++) {
-    children.push(<option value={i.toFixed(2)}>${i.toFixed(2)}</option>);
+    children.push(
+      <option key={i} value={i.toFixed(2)}>
+        ${i.toFixed(2)}
+      </option>
+    );
   }
 
   const router = useRouter();
@@ -92,16 +96,17 @@ const CreateCourse = () => {
   // handle the create course
   const createCourse = async (e) => {
     e.preventDefault();
-    // try {
-    //   await axios.post("/api/course", {
-    //     ...values,
-    //     image,
-    //   });
-    //   toast.success("Great! Now you can start adding lessons");
-    //   router.push("/instructor");
-    // } catch (err) {
-    //   toast.error(err.response.data);
-    // }
+    try {
+      await axios.post("/api/v1/course/create", {
+        ...values,
+        image,
+      });
+      toast.success("Course Created");
+      router.push("/instructor");
+      console.log("Create Course Success", data);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -160,8 +165,10 @@ const CreateCourse = () => {
                   <select
                     className='form-select'
                     defaultValue={`$9.99`}
-                    // value={paid}
-                    onChange={(v) => setValues({ ...values, price: v })}
+                    value={price}
+                    onChange={(e) =>
+                      setValues({ ...values, price: e.target.value })
+                    }
                   >
                     {children}
                   </select>
@@ -182,9 +189,9 @@ const CreateCourse = () => {
               >
                 <option>Please select</option>
                 {categories.length > 0 &&
-                  categories.map((c) => (
-                    <option key={c._id} value={c._id}>
-                      {c.name}
+                  categories.map((category) => (
+                    <option key={category._id} value={category._id}>
+                      {category.name}
                     </option>
                   ))}
               </select>
@@ -229,12 +236,15 @@ const CreateCourse = () => {
             </div>
           </div>
 
-          <button type='submit' className='btn btn-primary w-25 btn-lg'>
+          <button
+            onClick={createCourse}
+            type='submit'
+            className='btn btn-primary w-25 btn-lg'
+          >
             {loading ? <AiOutlineLoading3Quarters /> : "Create Course"}
           </button>
         </form>
       </div>
-      <pre>{JSON.stringify(values, null, 4)}</pre>
     </InstructorRoute>
   );
 };

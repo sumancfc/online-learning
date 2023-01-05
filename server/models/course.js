@@ -4,7 +4,7 @@ const { ObjectId } = Schema;
 
 const courseSchema = new Schema(
   {
-    title: {
+    name: {
       type: String,
       trim: true,
       required: true,
@@ -13,8 +13,7 @@ const courseSchema = new Schema(
     },
     slug: {
       type: String,
-      unique: true,
-      index: true,
+      lowercase: true,
     },
     description: { type: {}, minlength: 100, required: true },
     price: {
@@ -24,7 +23,7 @@ const courseSchema = new Schema(
     image: {},
     category: {
       type: ObjectId,
-      ref: "Lesson",
+      ref: "Category",
       required: true,
     },
     published: {

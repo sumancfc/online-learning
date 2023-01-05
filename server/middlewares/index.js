@@ -1,4 +1,5 @@
 const expressJwt = require("express-jwt");
+const User = require("../models/user");
 
 exports.requireSignin = expressJwt({
   getToken: (req, res) => req.cookies.token,
