@@ -80,7 +80,7 @@ exports.createCourse = async (req, res) => {
     const courseExist = await Course.findOne({
       slug: slugify(req.body.name.toLowerCase()),
     });
-    courseExist && res.status(400).send("Course is Already Present");
+    courseExist && res.status(400).json({ error: "Course is Already Present" });
 
     const course = await new Course({
       slug: slugify(req.body.name),
@@ -92,6 +92,21 @@ exports.createCourse = async (req, res) => {
     return res.status(200).json(course);
   } catch (err) {
     console.log(err);
-    return res.status(400).send("Course Failed To Create");
+    return res.status(400).json({ error: "Course Failed To Create" });
+  }
+};
+
+// get single course by slug
+exports.getCourseBySlug = async (req, res) => {
+  try {
+    const course = await Course.findOne({ slug: req.params.slug })
+      .populate("instructor", "_id name")
+      .populate("category", "name")
+      .exec();
+
+    return res.status(200).json(course);
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({ error: "Course Failed To Create" });
   }
 };

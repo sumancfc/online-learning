@@ -24,6 +24,16 @@ const InstructorNav = () => {
       >
         Create Course
       </Link>
+      <Link
+        href='/instructor/course'
+        className={
+          router.pathname === "/instructor/course"
+            ? "nav-link active"
+            : "nav-link"
+        }
+      >
+        My Courses
+      </Link>
     </div>
   );
 };

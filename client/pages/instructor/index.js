@@ -1,7 +1,87 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
 import InstructorRoute from "@/components/Routes/InstructorRoute";
+import SectionTitle from "@/components/Section/Title";
+import Avatar from "@/components/Avatar";
+import Link from "next/link";
 
 const Instructor = () => {
-  return <InstructorRoute>Instructor</InstructorRoute>;
+  const [courses, setCourses] = useState([]);
+
+  useEffect(() => {
+    getAllCoursesByInstructor();
+  }, []);
+
+  const getAllCoursesByInstructor = async () => {
+    try {
+      const { data } = await axios.get("/api/v1/courses-by-instructor");
+      // console.log(data);
+      setCourses(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  return (
+    <InstructorRoute>
+      <SectionTitle titleName={"Dashboard"} />
+      <div className='col-md-12'>
+        <h3>My Courses</h3>
+
+        <table className='table my-3'>
+          <thead>
+            <tr>
+              <th scope='col'>S.N</th>
+              <th scope='col'>Title</th>
+              <th scope='col'>Category</th>
+              <th scope='col'>Category</th>
+              <th scope='col'>Lesson</th>
+              <th scope='col'>Image</th>
+              <th scope='col'>Action</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {courses &&
+              courses.map((course, i) => {
+                // console.log(course.lessons.length);
+                return (
+                  <tr key={i}>
+                    <td>{i + 1}</td>
+                    <td>{course.name}</td>
+                    <td>{course.category.name}</td>
+                    <td>{course.lessons.length}</td>
+                    <td>{course.description.substring(0, 20)}</td>
+                    <td>
+                      <Avatar
+                        src={
+                          course.image
+                            ? course.image.Location
+                            : "/img/default.jpg"
+                        }
+                        width={50}
+                        height={50}
+                        quality={100}
+                        alt={course.name}
+                        className='rounded-circle'
+                      />
+                    </td>
+                    <td>
+                      <Link
+                        href={`/instructor/course/view/${course.slug}`}
+                        className='btn btn-primary'
+                      >
+                        View Course
+                      </Link>
+                    </td>
+                  </tr>
+                );
+              })}
+          </tbody>
+        </table>
+      </div>
+    </InstructorRoute>
+  );
 };
 
 export default Instructor;

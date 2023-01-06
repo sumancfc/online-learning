@@ -5,6 +5,7 @@ const {
   imageUploadToAWS,
   imageRemoveFromAWS,
   createCourse,
+  getCourseBySlug,
 } = require("../controllers/course");
 const { requireSignin, isInstructor } = require("../middlewares");
 
@@ -14,5 +15,6 @@ router.post("/course/remove-image", imageRemoveFromAWS);
 
 // course routes
 router.post("/course/create", requireSignin, isInstructor, createCourse);
+router.get("/course/:slug", getCourseBySlug);
 
 module.exports = router;

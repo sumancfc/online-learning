@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const Course = require("../models/course");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const queryString = require("querystring");
 
@@ -77,5 +78,22 @@ exports.currentInstructor = async (req, res) => {
   } catch (err) {
     console.log(err);
     return res.status(400).send("Error. Try Again!!");
+  }
+};
+
+// get all him courses by the instructor
+exports.getAllCoursesByInstructor = async (req, res) => {
+  try {
+    const courses = await Course.find({ instructor: req.user._id })
+      .populate("category", "name")
+      .sort({ createdAt: -1 })
+      .exec();
+
+    return res.status(200).json(courses);
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(400)
+      .json({ error: "Failed To Get Course By Instructor" });
   }
 };

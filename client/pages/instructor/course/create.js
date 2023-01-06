@@ -12,10 +12,10 @@ const CreateCourse = () => {
   const [values, setValues] = useState({
     name: "",
     description: "",
-    paid: false,
+    paid: true,
     price: "9.99",
     uploading: false,
-    category: "Choose a Category",
+    category: "",
     loading: false,
   });
 
@@ -152,7 +152,13 @@ const CreateCourse = () => {
                   className='form-select'
                   value={paid}
                   name='paid'
-                  onChange={(v) => setValues({ ...values, paid: !paid })}
+                  onChange={(e) =>
+                    setValues({
+                      ...values,
+                      paid: !paid,
+                      price: 0,
+                    })
+                  }
                 >
                   <option value={true}>Paid Course</option>
                   <option value={false}>Free Course</option>
@@ -164,8 +170,9 @@ const CreateCourse = () => {
                 <div className='auth-input'>
                   <select
                     className='form-select'
-                    defaultValue={`$9.99`}
                     value={price}
+                    name='price'
+                    style={{ widht: "100%" }}
                     onChange={(e) =>
                       setValues({ ...values, price: e.target.value })
                     }

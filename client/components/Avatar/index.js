@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-const Avatar = ({ src, width, height, quality, alt, className }) => {
+const Avatar = ({ src, width, height, quality, alt, className = "" }) => {
   return (
     <Image
       src={src}
