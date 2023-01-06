@@ -34,8 +34,8 @@ const Instructor = () => {
               <th scope='col'>S.N</th>
               <th scope='col'>Title</th>
               <th scope='col'>Category</th>
-              <th scope='col'>Category</th>
               <th scope='col'>Lesson</th>
+              <th scope='col'>Description</th>
               <th scope='col'>Image</th>
               <th scope='col'>Action</th>
             </tr>
@@ -47,7 +47,11 @@ const Instructor = () => {
                 return (
                   <tr key={i}>
                     <td>{i + 1}</td>
-                    <td>{course.name}</td>
+                    <td>
+                      <Link href={`/instructor/course/view/${course.slug}`}>
+                        {course.name}
+                      </Link>
+                    </td>
                     <td>{course.category.name}</td>
                     <td>{course.lessons.length}</td>
                     <td>{course.description.substring(0, 20)}</td>
@@ -68,9 +72,15 @@ const Instructor = () => {
                     <td>
                       <Link
                         href={`/instructor/course/view/${course.slug}`}
-                        className='btn btn-primary'
+                        className='btn btn-primary mx-1'
                       >
-                        View Course
+                        View
+                      </Link>
+                      <Link
+                        href={`/instructor/course/edit/${course.slug}`}
+                        className='btn btn-secondary'
+                      >
+                        Edit
                       </Link>
                     </td>
                   </tr>

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Link from "next/link";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Modal, List, Avatar } from "antd";
@@ -93,13 +94,19 @@ const ViewCourse = ({ courseaaa }) => {
 
   return (
     <InstructorRoute>
-      <div className='mb-4 d-flex justify-content-end'>
+      <div className='mb-4 d-flex justify-content-end gap-3'>
         <button
           className='btn btn-primary'
           onClick={() => setModalVisible(true)}
         >
           Add Lesson
         </button>
+        <Link
+          href={`/instructor/course/edit/${course.slug}`}
+          className='btn btn-secondary'
+        >
+          Edit Course
+        </Link>
       </div>
       {
         <div className='d-flex gap-5'>

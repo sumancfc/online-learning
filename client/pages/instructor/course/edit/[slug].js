@@ -7,21 +7,25 @@ import SectionTitle from "@/components/Section/Title";
 import InstructorRoute from "@/components/Routes/InstructorRoute";
 import CreateCourseForm from "@/components/Forms/CreateCourseForm";
 
-const CreateCourse = () => {
-  const [values, setValues] = useState({
-    name: "",
-    description: "",
-    paid: true,
-    price: "9.99",
-    category: "",
-    loading: false,
-  });
+const EditCourse = ({ courseaaa }) => {
+  //   const [values, setValues] = useState({
+  //     name: "",
+  //     description: "",
+  //     paid: true,
+  //     price: "9.99",
+  //     category: "",
+  //     loading: false,
+  //     uploading: false,
+  //     lessons: [],
+  //   });
 
+  const [values, setValues] = useState(courseaaa);
   const [image, setImage] = useState({});
   const [categories, setCategories] = useState([]);
   const [imagePreview, setImagePreview] = useState("");
   const [uploadButton, setUploadButton] = useState("Image Upload");
 
+  //get all the categories
   useEffect(() => {
     const allCategories = async () => {
       try {
@@ -115,4 +119,12 @@ const CreateCourse = () => {
   );
 };
 
-export default CreateCourse;
+export async function getServerSideProps(context) {
+  const { slug } = context.params; // Use `context.params` to get dynamic params
+  const res = await fetch(`http://localhost:3000/api/v1/course/${slug}`);
+  const courseaaa = await res.json();
+
+  return { props: { courseaaa } };
+}
+
+export default EditCourse;
