@@ -2,8 +2,6 @@ const fs = require("fs");
 const AWS = require("aws-sdk");
 const { nanoid } = require("nanoid");
 const slugify = require("slugify");
-const Category = require("../models/category");
-const User = require("../models/user");
 const Course = require("../models/course");
 
 const awsConfig = {
@@ -168,5 +166,38 @@ exports.getCourseBySlug = async (req, res) => {
   } catch (err) {
     console.log(err);
     return res.status(400).json({ error: "Course Failed To Create" });
+  }
+};
+
+// add lesson to course
+exports.addLessonToCourse = async (req, res) => {
+  try {
+    const { title, content, video } = req.body;
+
+    //check if user is instructor or not
+    req.user._id != req.params.instructor &&
+      res.status(400).json({ error: "User is not Authorized." });
+
+    const courseUpdate = await Course.findOneAndUpdate(
+      { slug: req.params.slug },
+      {
+        $push: {
+          lessons: {
+            title,
+            content,
+            video,
+            slug: slugify(title).toLowerCase(), //change slug to lower case
+          },
+        },
+      },
+      { new: true }
+    )
+      .populate("instructor", "_id name")
+      .exec();
+
+    return res.status(200).json(courseUpdate);
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({ error: "Lesson Failed To Add" });
   }
 };

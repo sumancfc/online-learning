@@ -9,6 +9,7 @@ const {
   videoRemoveFromAWS,
   createCourse,
   getCourseBySlug,
+  addLessonToCourse,
 } = require("../controllers/course");
 const { requireSignin, isInstructor } = require("../middlewares");
 
@@ -32,5 +33,12 @@ router.post(
 // course routes
 router.post("/course/create", requireSignin, isInstructor, createCourse);
 router.get("/course/:slug", getCourseBySlug);
+
+//lesson add to course routes
+router.post(
+  "/course/lesson/:slug/:instructor",
+  requireSignin,
+  addLessonToCourse
+);
 
 module.exports = router;

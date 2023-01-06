@@ -6,7 +6,8 @@ import InstructorRoute from "@/components/Routes/InstructorRoute";
 import Avatar from "@/components/Avatar";
 import LessonForm from "@/components/Forms/LessonForm";
 
-const ViewCourse = ({ course }) => {
+const ViewCourse = ({ courseaaa }) => {
+  const [course, setCourse] = useState(courseaaa);
   const [values, setValues] = useState({
     title: "",
     content: "",
@@ -16,6 +17,8 @@ const ViewCourse = ({ course }) => {
   const [uploadButton, setUploadButton] = useState("Upload Video");
   const [videoInProgress, setVideoInProgress] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
+
+  console.log(course);
 
   //upload video to aws s3
   const uploadVideoHandle = async (e) => {
@@ -66,7 +69,26 @@ const ViewCourse = ({ course }) => {
       toast.error("Video Removing Failed. Try Again.");
     }
   };
-  const addLessonHandle = () => {};
+  //add lesson to course
+  const addLessonHandle = async (e) => {
+    console.log("Hello");
+    e.preventDefault();
+    try {
+      const { data } = await axios.post(
+        `/api/v1/course/lesson/${course.slug}/${course.instructor._id}`,
+        values
+      );
+      setValues({ ...values, title: "", content: "", video: {} });
+      setVideoInProgress(0);
+      setUploadButton("Upload video");
+      setModalVisible(false);
+      setCourse(data);
+      toast.success("Lesson Added To Course");
+    } catch (err) {
+      console.log(err);
+      toast.error("Lesson Failed To Add. Try Again.");
+    }
+  };
 
   return (
     <InstructorRoute>
@@ -121,9 +143,9 @@ const ViewCourse = ({ course }) => {
 export async function getServerSideProps(context) {
   const { slug } = context.params; // Use `context.params` to get dynamic params
   const res = await fetch(`http://localhost:3000/api/v1/course/${slug}`);
-  const course = await res.json();
+  const courseaaa = await res.json();
 
-  return { props: { course } };
+  return { props: { courseaaa } };
 }
 
 export default ViewCourse;
