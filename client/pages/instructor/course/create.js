@@ -6,7 +6,7 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import axios from "axios";
 import SectionTitle from "@/components/Section/Title";
 import InstructorRoute from "@/components/Routes/InstructorRoute";
-import Avatar from "@/components/Avatar";
+import CustomAvatar from "@/components/Avatar";
 
 const CreateCourse = () => {
   const [values, setValues] = useState({
@@ -224,7 +224,7 @@ const CreateCourse = () => {
             <div className='col-md-3'>
               {imagePreview && (
                 <div className='position-relative'>
-                  <Avatar
+                  <CustomAvatar
                     src={imagePreview}
                     width={150}
                     height={80}

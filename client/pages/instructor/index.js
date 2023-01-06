@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import InstructorRoute from "@/components/Routes/InstructorRoute";
 import SectionTitle from "@/components/Section/Title";
-import Avatar from "@/components/Avatar";
+import CustomAvatar from "@/components/Avatar";
 import Link from "next/link";
 
 const Instructor = () => {
@@ -52,7 +52,7 @@ const Instructor = () => {
                     <td>{course.lessons.length}</td>
                     <td>{course.description.substring(0, 20)}</td>
                     <td>
-                      <Avatar
+                      <CustomAvatar
                         src={
                           course.image
                             ? course.image.Location

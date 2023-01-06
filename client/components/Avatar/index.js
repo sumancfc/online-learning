@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-const Avatar = ({ src, width, height, quality, alt, className = "" }) => {
+const CustomAvatar = ({ src, width, height, quality, alt, className = "" }) => {
   return (
     <Image
       src={src}
@@ -13,4 +13,4 @@ const Avatar = ({ src, width, height, quality, alt, className = "" }) => {
   );
 };
 
-export default Avatar;
+export default CustomAvatar;

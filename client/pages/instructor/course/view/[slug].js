@@ -1,9 +1,10 @@
 import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { Modal, List } from "antd";
+import { Modal, List, Avatar } from "antd";
+import Item from "antd/lib/list/Item";
 import InstructorRoute from "@/components/Routes/InstructorRoute";
-import Avatar from "@/components/Avatar";
+import CustomAvatar from "@/components/Avatar";
 import LessonForm from "@/components/Forms/LessonForm";
 
 const ViewCourse = ({ courseaaa }) => {
@@ -102,7 +103,7 @@ const ViewCourse = ({ courseaaa }) => {
       </div>
       {
         <div className='d-flex gap-5'>
-          <Avatar
+          <CustomAvatar
             src={course.image ? course.image.Location : "/img/default.jpg"}
             width={200}
             height={200}
@@ -136,6 +137,24 @@ const ViewCourse = ({ courseaaa }) => {
           addLessonHandle={addLessonHandle}
         />
       </Modal>
+
+      <div className='row mt-5 pb-5'>
+        <div className='col lesson-list'>
+          <h4>{course && course.lessons && course.lessons.length} Lessons</h4>
+          <List
+            itemLayout='horizontal'
+            dataSource={course && course.lessons}
+            renderItem={(item, index) => (
+              <Item>
+                <Item.Meta
+                  avatar={<Avatar>{index + 1}</Avatar>}
+                  title={item.title}
+                ></Item.Meta>
+              </Item>
+            )}
+          ></List>
+        </div>
+      </div>
     </InstructorRoute>
   );
 };
