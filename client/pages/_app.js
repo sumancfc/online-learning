@@ -1,5 +1,6 @@
 import { ToastContainer } from "react-toastify";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "antd/dist/antd.min.css";
 import "../styles/globals.css";
 import "react-toastify/dist/ReactToastify.css";
 import Footer from "../components/Layout/Footer";

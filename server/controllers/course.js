@@ -1,3 +1,4 @@
+const fs = require("fs");
 const AWS = require("aws-sdk");
 const { nanoid } = require("nanoid");
 const slugify = require("slugify");
@@ -42,7 +43,7 @@ exports.imageUploadToAWS = async (req, res) => {
       if (err) {
         return res.sendStatus(400);
       }
-      console.log(data);
+
       res.send(data);
     });
   } catch (err) {
@@ -71,6 +72,65 @@ exports.imageRemoveFromAWS = async (req, res) => {
   } catch (err) {
     console.log(err);
     return res.status(400).json({ error: "Failed to Remove Image. Try Again" });
+  }
+};
+
+// course's video upload to aws s3
+exports.videoUploadToAWS = async (req, res) => {
+  try {
+    //check if user is instructor or not
+    req.user._id != req.params.instructor &&
+      res.status(400).json({ error: "User is not Authorized." });
+
+    const { video } = req.files;
+
+    !video && res.status(400).json({ error: "Vidoe not Found." });
+
+    // video params
+    const params = {
+      Bucket: "online-learning-bucket",
+      Key: `${nanoid()}.${video.type.split("/")[1]}`,
+      Body: fs.readFileSync(video.path),
+      ACL: "public-read",
+      ContentType: video.type,
+    };
+
+    // upload video to aws s3
+    S3.upload(params, (err, data) => {
+      err && res.sendStatus(400);
+
+      res.json(data);
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({ error: "Failed to Upload Video. Try Again" });
+  }
+};
+
+// course's video remove from aws s3
+exports.videoRemoveFromAWS = async (req, res) => {
+  try {
+    //check if user is instructor or not
+    req.user._id != req.params.instructor &&
+      res.status(400).json({ error: "User is not Authorized." });
+
+    const { Bucket, Key } = req.body;
+
+    // video params
+    const params = {
+      Bucket,
+      Key,
+    };
+
+    // remove from aws s3
+    S3.deleteObject(params, (err, data) => {
+      err && res.sendStatus(400);
+
+      res.json({ ok: true });
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({ error: "Failed to Upload Video. Try Again" });
   }
 };
 

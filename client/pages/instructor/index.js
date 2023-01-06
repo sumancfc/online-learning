@@ -44,7 +44,6 @@ const Instructor = () => {
           <tbody>
             {courses &&
               courses.map((course, i) => {
-                // console.log(course.lessons.length);
                 return (
                   <tr key={i}>
                     <td>{i + 1}</td>
