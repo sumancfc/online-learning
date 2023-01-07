@@ -18,10 +18,10 @@ const EditCourse = ({ courseaaa }) => {
   //     uploading: false,
   //     lessons: [],
   //   });
-
-  const [values, setValues] = useState(courseaaa);
+  const [values, setValues] = useState({});
   const [image, setImage] = useState({});
   const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [imagePreview, setImagePreview] = useState("");
   const [uploadButton, setUploadButton] = useState("Image Upload");
 
@@ -38,6 +38,11 @@ const EditCourse = ({ courseaaa }) => {
     allCategories();
   }, []);
 
+  useEffect(() => {
+    setValues(courseaaa);
+    setImagePreview(values.image);
+  }, [values]);
+  console.log(imagePreview);
   const router = useRouter();
 
   //handle all the state change

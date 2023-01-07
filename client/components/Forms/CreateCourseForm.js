@@ -138,7 +138,7 @@ const CreateCourseForm = ({
             {imagePreview && (
               <div className='position-relative'>
                 <CustomAvatar
-                  src={imagePreview}
+                  src={imagePreview.Location}
                   width={150}
                   height={80}
                   quality='75'
