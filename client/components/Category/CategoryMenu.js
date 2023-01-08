@@ -1,26 +1,10 @@
-import { useEffect, useState, useRef } from "react";
-import axios from "axios";
+import { useState, useRef } from "react";
 import Link from "next/link";
 import useOnHoverOutside from "../../hooks/useOnHoverOutside";
 
-const CategoryMenu = () => {
-  const [categories, setCategories] = useState([]);
+const CategoryMenu = ({ categories }) => {
   const dropdownRef = useRef(null); // Create a reference for dropdown container
   const [isMenuDropDownOpen, setMenuDropDownOpen] = useState(false);
-
-  useEffect(() => {
-    getCategories();
-  }, []);
-
-  //get all courses category
-  const getCategories = async () => {
-    try {
-      const { data } = await axios.get("api/v1/category/all");
-      setCategories(data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   // function to close dropdown
   const closeHoverMenu = () => {

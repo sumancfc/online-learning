@@ -12,8 +12,8 @@ import { Context } from "../../context";
 import SectionTitle from "../Section/Title";
 
 const SignIn = ({ title }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("sumanstha999@gmail.com");
+  const [password, setPassword] = useState("sumancfc1905");
   const [loading, setLoading] = useState(false);
 
   const {

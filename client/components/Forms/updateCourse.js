@@ -1,7 +1,8 @@
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import CustomAvatar from "@/components/Avatar";
+import { Avatar } from "antd";
 
-const CreateCourseForm = ({
+const UpdateCourseForm = ({
   values,
   setValues,
   image,
@@ -11,10 +12,11 @@ const CreateCourseForm = ({
   handleStateChange,
   handleImageUpload,
   handleImageRemove,
-  createCourse,
+  updateCourse,
 }) => {
   const { name, description, price, paid, category, loading } = values;
 
+  // get the price of paid course option
   const children = [];
   for (let i = 9.99; i <= 100.99; i++) {
     children.push(
@@ -23,9 +25,10 @@ const CreateCourseForm = ({
       </option>
     );
   }
+
   return (
     <div className='auth-form pt-3'>
-      <form className='d-grid gap-3' onSubmit={createCourse}>
+      <form className='d-grid gap-3' onSubmit={updateCourse}>
         <div className='auth-input-wrapper'>
           <div className='auth-input'>
             <input
@@ -100,7 +103,7 @@ const CreateCourseForm = ({
           <div className='auth-input pb-3'>
             <select
               className='form-select'
-              value={category}
+              value={values.category}
               name='category'
               onChange={(e) =>
                 setValues({ ...values, category: e.target.value })
@@ -152,15 +155,29 @@ const CreateCourseForm = ({
                 </button>
               </div>
             )}
+            {values.image && (
+              <CustomAvatar
+                width={150}
+                height={80}
+                quality='75'
+                alt={"Image Uploaded"}
+                className='shadow-lg p-3'
+                src={values.image.Location}
+              />
+            )}
           </div>
         </div>
 
-        <button type='submit' className='btn btn-primary w-25 btn-lg'>
-          {loading ? <AiOutlineLoading3Quarters /> : "Create Course"}
+        <button
+          onClick={updateCourse}
+          type='submit'
+          className='btn btn-primary w-25 btn-lg'
+        >
+          {loading ? <AiOutlineLoading3Quarters /> : "Update Course"}
         </button>
       </form>
     </div>
   );
 };
 
-export default CreateCourseForm;
+export default UpdateCourseForm;

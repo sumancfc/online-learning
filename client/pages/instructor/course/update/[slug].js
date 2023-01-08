@@ -1,27 +1,15 @@
 import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
 import Resizer from "react-image-file-resizer";
 import { toast } from "react-toastify";
 import axios from "axios";
 import SectionTitle from "@/components/Section/Title";
 import InstructorRoute from "@/components/Routes/InstructorRoute";
-import CreateCourseForm from "@/components/Forms/CreateCourseForm";
+import UpdateCourseForm from "@/components/Forms/updateCourse";
 
 const EditCourse = ({ courseaaa }) => {
-  //   const [values, setValues] = useState({
-  //     name: "",
-  //     description: "",
-  //     paid: true,
-  //     price: "9.99",
-  //     category: "",
-  //     loading: false,
-  //     uploading: false,
-  //     lessons: [],
-  //   });
-  const [values, setValues] = useState({});
+  const [values, setValues] = useState(courseaaa);
   const [image, setImage] = useState({});
   const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("");
   const [imagePreview, setImagePreview] = useState("");
   const [uploadButton, setUploadButton] = useState("Image Upload");
 
@@ -37,13 +25,6 @@ const EditCourse = ({ courseaaa }) => {
     };
     allCategories();
   }, []);
-
-  useEffect(() => {
-    setValues(courseaaa);
-    setImagePreview(values.image);
-  }, [values]);
-  console.log(imagePreview);
-  const router = useRouter();
 
   //handle all the state change
   const handleStateChange = (e) => {
@@ -64,10 +45,11 @@ const EditCourse = ({ courseaaa }) => {
         });
         setImage(data);
         setValues({ ...values, loading: false });
+        toast.success("Image Uploaded.");
       } catch (err) {
         console.log(err);
         setValues({ ...values, loading: false });
-        toast.error("Image upload failed. Try later.");
+        toast.error("Image Uploading Failed.");
       }
     });
   };
@@ -85,21 +67,19 @@ const EditCourse = ({ courseaaa }) => {
     } catch (err) {
       console.log(err);
       setValues({ ...values, loading: false });
-      toast.error("Image upload failed. Try Again.");
+      toast.error("Image Removing Failed.");
     }
   };
 
   // handle the create course
-  const createCourse = async (e) => {
+  const updateCourse = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("/api/v1/course/create", {
+      await axios.put(`/api/v1/course/${values.slug}`, {
         ...values,
         image,
       });
-      toast.success("Course Created");
-      router.push("/instructor");
-      console.log("Create Course Success", data);
+      toast.success("Course Updated");
     } catch (err) {
       console.log(err);
     }
@@ -107,8 +87,8 @@ const EditCourse = ({ courseaaa }) => {
 
   return (
     <InstructorRoute>
-      <SectionTitle titleName={"Create Course"} />
-      <CreateCourseForm
+      <SectionTitle titleName={"Update Course"} />
+      <UpdateCourseForm
         values={values}
         setValues={setValues}
         image={image}
@@ -118,7 +98,7 @@ const EditCourse = ({ courseaaa }) => {
         handleStateChange={handleStateChange}
         handleImageUpload={handleImageUpload}
         handleImageRemove={handleImageRemove}
-        createCourse={createCourse}
+        updateCourse={updateCourse}
       />
     </InstructorRoute>
   );

@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import Link from "next/link";
 import CategoryMenu from "../../Category/CategoryMenu";
 import Logo from "../../Logo";
@@ -7,6 +8,21 @@ import { HeaderRight } from "./HeaderRight";
 
 const Header = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    getCategories();
+  }, []);
+
+  //get all courses category
+  const getCategories = async () => {
+    try {
+      const { data } = await axios.get(`/api/v1/category/all`);
+      setCategories(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <div className='container-fluid'>
@@ -26,7 +42,7 @@ const Header = () => {
           }`}
           id='navbarNavDropdown'
         >
-          <CategoryMenu />
+          <CategoryMenu categories={categories} />
           {/* Header Search */}
           <SearchForm />
 

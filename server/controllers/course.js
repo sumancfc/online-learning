@@ -146,7 +146,6 @@ exports.createCourse = async (req, res) => {
       ...req.body,
     }).save();
 
-    console.log(course);
     return res.status(200).json(course);
   } catch (err) {
     console.log(err);
@@ -166,6 +165,31 @@ exports.getCourseBySlug = async (req, res) => {
   } catch (err) {
     console.log(err);
     return res.status(400).json({ error: "Course Failed To Create" });
+  }
+};
+
+// update course
+exports.updateCourse = async (req, res) => {
+  try {
+    const course = await Course.findOne({ slug: req.params.slug })
+      .populate("category", "name")
+      .exec();
+
+    req.user._id != course.instructor &&
+      res.status(400).json({ error: "User is not Authorized." });
+
+    const updateCourse = await Course.findOneAndUpdate(
+      { slug: req.params.slug },
+      req.body,
+      {
+        new: true,
+      }
+    ).exec();
+
+    return res.status(200).json(updateCourse);
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({ error: "Course Failed To Update" });
   }
 };
 

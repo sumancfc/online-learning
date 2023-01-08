@@ -58,7 +58,7 @@ const CreateCourse = () => {
       } catch (err) {
         console.log(err);
         setValues({ ...values, loading: false });
-        toast.error("Image upload failed. Try later.");
+        toast.error("Image Upload Failed.");
       }
     });
   };
@@ -76,7 +76,7 @@ const CreateCourse = () => {
     } catch (err) {
       console.log(err);
       setValues({ ...values, loading: false });
-      toast.error("Image upload failed. Try Again.");
+      toast.error("Image Removing Failed.");
     }
   };
 

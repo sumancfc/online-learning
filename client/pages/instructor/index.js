@@ -77,7 +77,7 @@ const Instructor = () => {
                         View
                       </Link>
                       <Link
-                        href={`/instructor/course/edit/${course.slug}`}
+                        href={`/instructor/course/update/${course.slug}`}
                         className='btn btn-secondary'
                       >
                         Edit
