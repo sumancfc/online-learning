@@ -2,10 +2,11 @@ import { useState, useEffect } from "react";
 import Resizer from "react-image-file-resizer";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { List, Avatar } from "antd";
-import { AiTwotoneDelete } from "react-icons/ai";
+import { List, Avatar, Modal } from "antd";
+import { AiTwotoneDelete, AiTwotoneEdit } from "react-icons/ai";
 import SectionTitle from "@/components/Section/Title";
 import InstructorRoute from "@/components/Routes/InstructorRoute";
+import UpdateLessonForm from "@/components/Forms/UpdateLessonForm";
 import UpdateCourseForm from "@/components/Forms/updateCourse";
 
 const { Item } = List;
@@ -27,6 +28,9 @@ const EditCourse = ({ courseaaa }) => {
   const [uploadButton, setUploadButton] = useState("Image Upload");
   const [visible, setVisible] = useState(false);
   const [currentLesson, setCurrentLesson] = useState({});
+  const [uploadVideoButton, setUploadVideoButton] = useState("Upload Video");
+  const [videoProgress, setVideoProgress] = useState(0);
+  const [videoUploading, setVideoUploading] = useState(false);
 
   useEffect(() => {
     setValues(courseaaa);
@@ -128,6 +132,71 @@ const EditCourse = ({ courseaaa }) => {
     });
   };
 
+  //upload video to course and aws s3
+  const uploadVideoHandle = async (e) => {
+    try {
+      // remove video if present already
+      if (currentLesson.video && currentLesson.video.Location) {
+        const { data } = await axios.post(
+          `/api/v1/course/remove-video/${values.instructor._id}`,
+          currentLesson.video
+        );
+        toast.success(data.message);
+      }
+
+      const file = e.target.files[0];
+      setUploadVideoButton(file.name);
+      setVideoUploading(true);
+
+      const videoData = new FormData();
+      videoData.append("video", file);
+      videoData.append("courseId", values._id);
+
+      const { data } = await axios.post(
+        `/api/v1/course/upload-video/${values.instructor._id}`,
+        videoData,
+        {
+          onUploadProgress: (e) =>
+            setVideoProgress(Math.round((100 * e.loaded) / e.total)),
+        }
+      );
+      console.log(data);
+      setCurrentLesson({ ...currentLesson, video: data });
+      setVideoUploading(false);
+      toast.success("Video Uploading Completed.");
+    } catch (err) {
+      console.log(err);
+      setVideoUploading(false);
+      toast.error("Video Uploading Failed.");
+    }
+  };
+
+  //update lesson to course
+  const updateLesson = async (e) => {
+    try {
+      e.preventDefault();
+      const { data } = await axios.put(
+        `/api/v1/course/lesson/${values.slug}/${currentLesson._id}`,
+        currentLesson
+      );
+
+      setUploadVideoButton("Upload Video");
+      setVisible(false);
+
+      if (data.ok) {
+        let arr = values.lessons;
+        const index = arr.findIndex((el) => el._id === currentLesson._id);
+        arr[index] = currentLesson;
+        setValues({ ...values, lessons: arr });
+        toast.success("Lesson Updated Successfully");
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error("Lesson Failed to Update");
+    }
+  };
+
+  //delete lesson handler
   const deleteLesson = async (index) => {
     const confirmToDelete = window.confirm("Are you sure you want to delete?");
     if (!confirmToDelete) return;
@@ -162,9 +231,9 @@ const EditCourse = ({ courseaaa }) => {
         handleImageRemove={handleImageRemove}
         updateCourse={updateCourse}
       />
-
-      <div className='row mt-5 pb-5'>
-        <div className='col lesson-list'>
+      {/* List of Lesson */}
+      <div className='mt-5 pb-5'>
+        <div className=''>
           <h4>{values && values.lessons && values.lessons.length} Lessons</h4>
           <List
             onDragOver={(e) => e.preventDefault()}
@@ -177,23 +246,45 @@ const EditCourse = ({ courseaaa }) => {
                 onDrop={(e) => dropLesson(e, index)}
               >
                 <Item.Meta
-                  onClick={() => {
-                    setVisible(true);
-                    setCurrentLesson(item);
-                  }}
                   avatar={<Avatar>{index + 1}</Avatar>}
                   title={item.title}
                 ></Item.Meta>
 
+                <AiTwotoneEdit
+                  onClick={() => {
+                    setVisible(true);
+                    setCurrentLesson(item);
+                  }}
+                  className='text-primary float-right fs-3 pointer mx-3'
+                />
+
                 <AiTwotoneDelete
                   onClick={() => deleteLesson(index)}
-                  className='text-danger float-right fs-3'
+                  className='text-danger float-right fs-3 pointer'
                 />
               </Item>
             )}
           ></List>
         </div>
       </div>
+
+      <Modal
+        title='Edit lesson'
+        centered
+        visible={visible}
+        onCancel={() => setVisible(false)}
+        footer={null}
+      >
+        <UpdateLessonForm
+          currentLesson={currentLesson}
+          setCurrentLesson={setCurrentLesson}
+          uploadVideoHandle={uploadVideoHandle}
+          updateLesson={updateLesson}
+          uploadVideoButton={uploadVideoButton}
+          videoProgress={videoProgress}
+          videoUploading={videoUploading}
+        />
+      </Modal>
     </InstructorRoute>
   );
 };

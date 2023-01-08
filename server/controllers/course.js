@@ -124,7 +124,7 @@ exports.videoRemoveFromAWS = async (req, res) => {
     S3.deleteObject(params, (err, data) => {
       err && res.sendStatus(400);
 
-      res.json({ ok: true });
+      res.json({ message: "Video Deleted Successfully" });
     });
   } catch (err) {
     console.log(err);
@@ -220,6 +220,36 @@ exports.addLessonToCourse = async (req, res) => {
       .exec();
 
     return res.status(200).json(courseUpdate);
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({ error: "Lesson Failed To Add" });
+  }
+};
+
+// add lesson to course
+exports.updateLessonToCourse = async (req, res) => {
+  try {
+    const { slug } = req.params;
+    const { _id, title, content, video, free_video_preview } = req.body;
+    const course = await Course.findOne({ slug }).select("instructor").exec();
+
+    course.instructor._id != req.user._id &&
+      res.status(400).json({ error: "User is not Authorized." });
+
+    await Course.updateOne(
+      { "lessons._id": _id },
+      {
+        $set: {
+          "lessons.$.title": title,
+          "lessons.$.content": content,
+          "lessons.$.video": video,
+          "lessons.$.free_video_preview": free_video_preview,
+        },
+      },
+      { new: true }
+    ).exec();
+
+    return res.json({ ok: true });
   } catch (err) {
     console.log(err);
     return res.status(400).json({ error: "Lesson Failed To Add" });
