@@ -12,7 +12,9 @@ const {
   updateCourse,
   addLessonToCourse,
   updateLessonToCourse,
-  removeLessonFromCourse,
+  deleteLessonFromCourse,
+  publishYourCourse,
+  unpublishYourCourse,
 } = require("../controllers/course");
 const { requireSignin, isInstructor } = require("../middlewares");
 
@@ -38,6 +40,10 @@ router.post("/course/create", requireSignin, isInstructor, createCourse);
 router.get("/course/:slug", getCourseBySlug);
 router.put("/course/:slug", requireSignin, updateCourse);
 
+// course publish unpublish --> it is in top then course lesson :: to avoid error because course lesson have to params
+router.put("/course/publish/:courseId", requireSignin, publishYourCourse);
+router.put("/course/unpublish/:courseId", requireSignin, unpublishYourCourse);
+
 //lesson add to course routes
 router.post(
   "/course/lesson/:slug/:instructor",
@@ -49,6 +55,6 @@ router.put(
   requireSignin,
   updateLessonToCourse
 );
-router.put("/course/:slug/:lesson", requireSignin, removeLessonFromCourse);
+router.put("/course/:slug/:lesson", requireSignin, deleteLessonFromCourse);
 
 module.exports = router;

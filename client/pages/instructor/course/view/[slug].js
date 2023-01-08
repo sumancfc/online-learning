@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import axios from "axios";
+import { AiOutlineQuestion } from "react-icons/ai";
 import { toast } from "react-toastify";
-import { Modal, List, Avatar } from "antd";
-import Item from "antd/lib/list/Item";
+import { Modal, List, Avatar, Tooltip, Button } from "antd";
 import InstructorRoute from "@/components/Routes/InstructorRoute";
 import CustomAvatar from "@/components/Avatar";
 import LessonForm from "@/components/Forms/LessonForm";
+const { Item } = List;
 
 const ViewCourse = ({ courseaaa }) => {
   const [course, setCourse] = useState(courseaaa);
@@ -20,7 +21,7 @@ const ViewCourse = ({ courseaaa }) => {
   const [videoInProgress, setVideoInProgress] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
 
-  console.log(course);
+  console.log(course._id);
 
   //upload video to aws s3
   const uploadVideoHandle = async (e) => {
@@ -91,6 +92,27 @@ const ViewCourse = ({ courseaaa }) => {
     }
   };
 
+  //publish course
+  const publishCource = async (e, cID) => {
+    try {
+      const { data } = await axios.put(`/api/v1/course/publish/${cID}`);
+      setCourse(data);
+      toast.success("Course is live now.");
+    } catch (err) {
+      toast.error("Course Failed to Publish.");
+    }
+  };
+
+  const unpublishCourse = async (e, courseId) => {
+    try {
+      const { data } = await axios.put(`/api/v1/course/unpublish/${courseId}`);
+      setCourse(data);
+      toast.success("Course is Unpublished.");
+    } catch (err) {
+      toast.error("Course Failed to Unpublish.");
+    }
+  };
+
   return (
     <InstructorRoute>
       <div className='mb-4 d-flex justify-content-end gap-3'>
@@ -119,7 +141,7 @@ const ViewCourse = ({ courseaaa }) => {
           />
           <div className=''>
             <h1 className=''>{course.name}</h1>
-            <strong>Category: {course.category.name}</strong>
+            {/* <strong>Category: {course.category.name}</strong> */}
             <p>{course.description.substring(0, 120)}</p>
           </div>
         </div>
@@ -143,7 +165,7 @@ const ViewCourse = ({ courseaaa }) => {
           addLessonHandle={addLessonHandle}
         />
       </Modal>
-
+      {/* Show list of lesson */}
       <div className='row mt-5 pb-5'>
         <div className='col'>
           <h3>{course && course.lessons && course.lessons.length} Lessons</h3>
@@ -161,6 +183,38 @@ const ViewCourse = ({ courseaaa }) => {
           ></List>
         </div>
       </div>
+
+      {/* course publish unpublished */}
+      {course.lessons && course.lessons.length < 3 ? (
+        <Tooltip title='Min 3 lessons required to publish'>
+          <AiOutlineQuestion
+            className='h5 pointer text-danger'
+            style={{ float: "right" }}
+          />
+        </Tooltip>
+      ) : course.published ? (
+        <Tooltip title='Unpublish'>
+          <Button
+            type='secondary'
+            size={"large"}
+            style={{ float: "right" }}
+            onClick={(e) => unpublishCourse(e, course._id)}
+          >
+            Unpublish
+          </Button>
+        </Tooltip>
+      ) : (
+        <Tooltip title='Publish'>
+          <Button
+            type='primary'
+            size={"large"}
+            style={{ float: "right" }}
+            onClick={(e) => publishCource(e, course._id)}
+          >
+            Publish
+          </Button>
+        </Tooltip>
+      )}
     </InstructorRoute>
   );
 };

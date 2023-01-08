@@ -35,8 +35,8 @@ const Instructor = () => {
               <th scope='col'>Title</th>
               <th scope='col'>Category</th>
               <th scope='col'>Lesson</th>
-              <th scope='col'>Description</th>
               <th scope='col'>Image</th>
+              <th scope='col'>Status</th>
               <th scope='col'>Action</th>
             </tr>
           </thead>
@@ -54,7 +54,6 @@ const Instructor = () => {
                     </td>
                     <td>{course.category.name}</td>
                     <td>{course.lessons.length}</td>
-                    <td>{course.description.substring(0, 20)}</td>
                     <td>
                       <CustomAvatar
                         src={
@@ -68,6 +67,13 @@ const Instructor = () => {
                         alt={course.name}
                         className='rounded-circle'
                       />
+                    </td>
+                    <td>
+                      {course.published ? (
+                        <small className='text-success'>Published</small>
+                      ) : (
+                        <small className='text-danger'>Unpublished</small>
+                      )}
                     </td>
                     <td>
                       <Link

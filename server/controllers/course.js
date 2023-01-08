@@ -257,7 +257,7 @@ exports.updateLessonToCourse = async (req, res) => {
 };
 
 //delete lesson from course
-exports.removeLessonFromCourse = async (req, res) => {
+exports.deleteLessonFromCourse = async (req, res) => {
   try {
     const { slug, lesson } = req.params;
 
@@ -274,5 +274,49 @@ exports.removeLessonFromCourse = async (req, res) => {
   } catch (err) {
     console.log(err);
     return res.status(400).json({ error: "Lesson Failed To Delete" });
+  }
+};
+
+// publish course
+exports.publishYourCourse = async (req, res) => {
+  try {
+    const { courseId } = req.params;
+    const course = await Course.findById(courseId).select("instructor").exec();
+
+    course.instructor._id != req.user._id &&
+      res.status(400).json({ error: "User is not Authorized." });
+
+    const updateCourse = await Course.findByIdAndUpdate(
+      courseId,
+      { published: true },
+      { new: true }
+    ).exec();
+
+    return res.status(200).json(updateCourse);
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({ error: "Course Failed to Publish." });
+  }
+};
+
+// unpublish course
+exports.unpublishYourCourse = async (req, res) => {
+  try {
+    const { courseId } = req.params;
+    const course = await Course.findById(courseId).select("instructor").exec();
+
+    course.instructor._id != req.user._id &&
+      res.status(400).json({ error: "User is not Authorized." });
+
+    const updateCourse = await Course.findByIdAndUpdate(
+      courseId,
+      { published: false },
+      { new: true }
+    ).exec();
+
+    return res.status(200).json(updateCourse);
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({ error: "Course Failed to Unpublish." });
   }
 };
