@@ -2,16 +2,35 @@ import { useState, useEffect } from "react";
 import Resizer from "react-image-file-resizer";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { List, Avatar } from "antd";
+import { AiTwotoneDelete } from "react-icons/ai";
 import SectionTitle from "@/components/Section/Title";
 import InstructorRoute from "@/components/Routes/InstructorRoute";
 import UpdateCourseForm from "@/components/Forms/updateCourse";
 
+const { Item } = List;
+
 const EditCourse = ({ courseaaa }) => {
-  const [values, setValues] = useState(courseaaa);
+  const [values, setValues] = useState({
+    name: "",
+    description: "",
+    price: "9.99",
+    uploading: false,
+    paid: true,
+    category: "",
+    loading: false,
+    lessons: [],
+  });
   const [image, setImage] = useState({});
   const [categories, setCategories] = useState([]);
   const [imagePreview, setImagePreview] = useState("");
   const [uploadButton, setUploadButton] = useState("Image Upload");
+  const [visible, setVisible] = useState(false);
+  const [currentLesson, setCurrentLesson] = useState({});
+
+  useEffect(() => {
+    setValues(courseaaa);
+  }, []);
 
   //get all the categories
   useEffect(() => {
@@ -71,7 +90,7 @@ const EditCourse = ({ courseaaa }) => {
     }
   };
 
-  // handle the create course
+  // handle the upload course
   const updateCourse = async (e) => {
     e.preventDefault();
     try {
@@ -82,6 +101,49 @@ const EditCourse = ({ courseaaa }) => {
       toast.success("Course Updated");
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  // handle the drag of the lesson
+  const dragLesson = (e, index) => {
+    e.dataTransfer.setData("itemIndex", index);
+    // console.log("Drag from", index);
+  };
+
+  // handle the drop of the lesson
+  const dropLesson = async (e, index) => {
+    const movingItemIndex = e.dataTransfer.getData("itemIndex");
+    const targetItemIndex = index;
+    let allLessons = values.lessons;
+
+    let movingItem = allLessons[movingItemIndex];
+    allLessons.splice(movingItemIndex, 1);
+    allLessons.splice(targetItemIndex, 0, movingItem);
+
+    setValues({ ...values, lessons: [...allLessons] });
+    // lesson's order saved on database
+    await axios.put(`/api/v1/course/${values.slug}`, {
+      ...values,
+      image,
+    });
+  };
+
+  const deleteLesson = async (index) => {
+    const confirmToDelete = window.confirm("Are you sure you want to delete?");
+    if (!confirmToDelete) return;
+    try {
+      let allLessons = values.lessons;
+      const removeLesson = allLessons.splice(index, 1);
+
+      setValues({ ...values, lessons: allLessons });
+
+      const { data } = await axios.put(
+        `/api/v1/course/${values.slug}/${removeLesson[0]._id}`
+      );
+      toast.success(data.ok);
+    } catch (err) {
+      console.log(err);
+      toast.error("Lesson Failed to Delete");
     }
   };
 
@@ -100,6 +162,38 @@ const EditCourse = ({ courseaaa }) => {
         handleImageRemove={handleImageRemove}
         updateCourse={updateCourse}
       />
+
+      <div className='row mt-5 pb-5'>
+        <div className='col lesson-list'>
+          <h4>{values && values.lessons && values.lessons.length} Lessons</h4>
+          <List
+            onDragOver={(e) => e.preventDefault()}
+            itemLayout='horizontal'
+            dataSource={values && values.lessons}
+            renderItem={(item, index) => (
+              <Item
+                draggable
+                onDragStart={(e) => dragLesson(e, index)}
+                onDrop={(e) => dropLesson(e, index)}
+              >
+                <Item.Meta
+                  onClick={() => {
+                    setVisible(true);
+                    setCurrentLesson(item);
+                  }}
+                  avatar={<Avatar>{index + 1}</Avatar>}
+                  title={item.title}
+                ></Item.Meta>
+
+                <AiTwotoneDelete
+                  onClick={() => deleteLesson(index)}
+                  className='text-danger float-right fs-3'
+                />
+              </Item>
+            )}
+          ></List>
+        </div>
+      </div>
     </InstructorRoute>
   );
 };

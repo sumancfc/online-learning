@@ -73,7 +73,6 @@ const ViewCourse = ({ courseaaa }) => {
   };
   //add lesson to course
   const addLessonHandle = async (e) => {
-    console.log("Hello");
     e.preventDefault();
     try {
       const { data } = await axios.post(
@@ -102,7 +101,7 @@ const ViewCourse = ({ courseaaa }) => {
           Add Lesson
         </button>
         <Link
-          href={`/instructor/course/edit/${course.slug}`}
+          href={`/instructor/course/update/${course.slug}`}
           className='btn btn-secondary'
         >
           Edit Course
@@ -146,8 +145,8 @@ const ViewCourse = ({ courseaaa }) => {
       </Modal>
 
       <div className='row mt-5 pb-5'>
-        <div className='col lesson-list'>
-          <h4>{course && course.lessons && course.lessons.length} Lessons</h4>
+        <div className='col'>
+          <h3>{course && course.lessons && course.lessons.length} Lessons</h3>
           <List
             itemLayout='horizontal'
             dataSource={course && course.lessons}

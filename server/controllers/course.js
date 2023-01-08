@@ -225,3 +225,24 @@ exports.addLessonToCourse = async (req, res) => {
     return res.status(400).json({ error: "Lesson Failed To Add" });
   }
 };
+
+//delete lesson from course
+exports.removeLessonFromCourse = async (req, res) => {
+  try {
+    const { slug, lesson } = req.params;
+
+    const course = await Course.findOne({ slug }).exec();
+    //check if user is instructor or not
+    req.user._id != course.instructor &&
+      res.status(400).json({ error: "User is not Authorized." });
+
+    await Course.findByIdAndUpdate(course._id, {
+      $pull: { lessons: { _id: lesson } },
+    }).exec();
+
+    res.json({ ok: "Course Deleted Successfully" });
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({ error: "Lesson Failed To Delete" });
+  }
+};

@@ -11,6 +11,7 @@ const {
   getCourseBySlug,
   updateCourse,
   addLessonToCourse,
+  removeLessonFromCourse,
 } = require("../controllers/course");
 const { requireSignin, isInstructor } = require("../middlewares");
 
@@ -42,5 +43,6 @@ router.post(
   requireSignin,
   addLessonToCourse
 );
+router.put("/course/:slug/:lesson", requireSignin, removeLessonFromCourse);
 
 module.exports = router;
