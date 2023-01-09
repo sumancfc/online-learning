@@ -3,6 +3,7 @@ const formidable = require("express-formidable");
 const router = express.Router();
 
 const {
+  getCourses,
   imageUploadToAWS,
   imageRemoveFromAWS,
   videoUploadToAWS,
@@ -17,6 +18,8 @@ const {
   unpublishYourCourse,
 } = require("../controllers/course");
 const { requireSignin, isInstructor } = require("../middlewares");
+
+router.get("/course/all", getCourses);
 
 // image upload and remove from aws
 router.post("/course/upload-image", imageUploadToAWS);

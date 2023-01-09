@@ -1,12 +1,12 @@
 const Footer = () => {
   return (
-    <footer className='pt-5 pb-5'>
+    <footer className='pt-5 pb-5 bg-black'>
       <div className='container'>
         <div className='row'>
           <div className='col-sm-12 col-md-4'>
-            <h4 className='mb-3'>Customer Service</h4>
+            <h4 className='mb-3 text-white'>Customer Service</h4>
 
-            <ul className='list-unstyled'>
+            <ul className='list-unstyled gap-3 text-gray'>
               <li>
                 <a href='#'>My Account</a>
               </li>
@@ -26,9 +26,9 @@ const Footer = () => {
           </div>
 
           <div className='col-sm-12 col-md-4'>
-            <h4 className='mb-3'>Corporation</h4>
+            <h4 className='mb-3 text-white'>Corporation</h4>
 
-            <ul className='list-unstyled'>
+            <ul className='list-unstyled text-gray'>
               <li>
                 <a href='#'>About us</a>
               </li>
@@ -48,9 +48,9 @@ const Footer = () => {
           </div>
 
           <div className='col-sm-12 col-md-4'>
-            <h4 className='mb-3'>Why Choose Us</h4>
+            <h4 className='mb-3 text-white'>Why Choose Us</h4>
 
-            <ul className='list-unstyled'>
+            <ul className='list-unstyled text-gray'>
               <li>
                 <a href='#'>Shopping Guide</a>
               </li>
@@ -73,7 +73,7 @@ const Footer = () => {
 
       <div className='container pt-3'>
         <div className='row'>
-          <div className='d-flex justify-content-center'>
+          <div className='d-flex justify-content-center text-white'>
             &copy; 2022 Online Learning Platform.
           </div>
         </div>

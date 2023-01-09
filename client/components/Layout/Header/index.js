@@ -39,7 +39,7 @@ const Header = () => {
     };
   });
   const sticky = (e) => {
-    const header = document.querySelector(".header__area");
+    const header = document.querySelector(".header-area");
     const scrollTop = window.scrollY;
     scrollTop >= 1
       ? header.classList.add("sticky")
@@ -48,7 +48,7 @@ const Header = () => {
   // Sticky Menu Area End
 
   return (
-    <div className='header__area header__transparent'>
+    <div className='header-area header-transparent'>
       <div className='container-fluid'>
         <div className='row align-items-center'>
           <div className='col'>

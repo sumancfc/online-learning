@@ -153,6 +153,21 @@ exports.createCourse = async (req, res) => {
   }
 };
 
+// get all the courses
+exports.getCourses = async (req, res) => {
+  try {
+    const courses = await Course.find({ published: true })
+      .populate("instructor", "_id name")
+      .populate("category", "_id name")
+      .exec();
+
+    return res.json(courses);
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({ error: "Failed to Get All Courses!" });
+  }
+};
+
 // get single course by slug
 exports.getCourseBySlug = async (req, res) => {
   try {
