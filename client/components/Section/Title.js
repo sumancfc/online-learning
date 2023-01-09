@@ -1,8 +1,2 @@
-const SectionTitle = ({ titleName }) => {
-  return (
-    <div className='section-title-wrapper'>
-      <h1 className='section-title'>{titleName}</h1>
-    </div>
-  );
-};
+const SectionTitle = ({ titleName }) => <h2 className='title'>{titleName}</h2>;
 export default SectionTitle;
