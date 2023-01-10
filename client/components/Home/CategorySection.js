@@ -1,22 +1,9 @@
-import { useState, useEffect } from "react";
 import Link from "next/link";
-import axios from "axios";
 import Icon from "../Icon";
 import SubTitle from "../Section/SubTitle";
 import SectionTitle from "../Section/Title";
 
-const CategorySection = () => {
-  const [categories, setCategories] = useState([]);
-
-  useEffect(() => {
-    allCategories();
-  }, []);
-
-  const allCategories = async () => {
-    const { data } = await axios.get("/api/v1/category/all");
-    setCategories(data);
-  };
-
+const CategorySection = ({ categories }) => {
   return (
     <div className='section category-section bg-1'>
       <div className='container'>

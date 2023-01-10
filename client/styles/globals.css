@@ -123,6 +123,22 @@ p {
   color: var(--secondary);
 }
 
+.ant-tabs-tab {
+  padding: 0;
+}
+.ant-tabs-tab > div {
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+}
+
+.ant-tabs-tab-active {
+  background: var(--secondary);
+}
+
+.ant-tabs-tab-active > div {
+  color: var(--white) !important;
+}
+
 /* Auth Area */
 .auth-form label {
   color: #0e1133;
