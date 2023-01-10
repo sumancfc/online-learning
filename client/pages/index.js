@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import Head from "next/head";
 import axios from "axios";
 import AboutSection from "@/components/Home/AboutSection";
 import CategorySection from "@/components/Home/CategorySection";
 import CourseSection from "@/components/Home/CourseSection";
 import Hero from "@/components/Home/Hero";
+import HtmlHead from "@/components/Head";
 
 const Home = ({ courses }) => {
   // const [courses, setCourses] = useState([]);
@@ -28,9 +28,7 @@ const Home = ({ courses }) => {
 
   return (
     <>
-      <Head>
-        <title>Online Learning Course</title>
-      </Head>
+      <HtmlHead title='Online Learning Platform' />
 
       <Hero />
 

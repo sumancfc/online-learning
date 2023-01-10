@@ -2,18 +2,21 @@ import { Tabs } from "antd";
 import { AiFillStar } from "react-icons/ai";
 const { TabPane } = Tabs;
 
-const Tab = () => {
+const Tab = ({ course }) => {
   const onChange = (key) => {
     console.log(key);
   };
 
+  const { name, description } = course;
+
   return (
     <Tabs defaultActiveKey='1' onChange={onChange}>
       <TabPane tab='Overview' key='overview'>
-        <div class='position-relative'>
-          <div class='p-4'>
+        <div className='position-relative'>
+          <div className='p-4'>
             <h4>Course Details</h4>
-            <p className='lead'>
+            <p className='lead'>{description}</p>
+            {/* <p className='lead'>
               Lorem Ipsum is simply dummy text of the printing and typesetting
               industry. Lorem Ipsum has been the industry's standard dummy text
               ever since the 1500s, when an unknown printer took a galley of
@@ -26,7 +29,7 @@ const Tab = () => {
               Lorem Ipsum.
             </p>
 
-            <ul class='my-3 d-flex align-items-center list-unstyled gap-5 '>
+            <ul className='my-3 d-flex align-items-center list-unstyled gap-5 '>
               <li className='fs-6'>23,564 Total Students</li>
               <li>
                 <span>5</span>
@@ -40,7 +43,7 @@ const Tab = () => {
               <li className='fs-6'>256 Reviews</li>
             </ul>
             <h3>What you'll learn?</h3>
-            <ul class='fs-6'>
+            <ul className='fs-6'>
               <li>Lorem Ipsum is simply dummy text of the new design</li>
               <li>Lorem Ipsum is simply dummy text of the new design</li>
               <li>Lorem Ipsum is simply dummy text of the new design</li>
@@ -53,7 +56,7 @@ const Tab = () => {
               </li>
             </ul>
             <h3>Requirements</h3>
-            <ul class='fs-6'>
+            <ul className='fs-6'>
               <li>Lorem Ipsum is simply dummy text of the new design</li>
               <li>Lorem Ipsum is simply dummy text of the new design</li>
               <li>Lorem Ipsum is simply dummy text of the new design</li>
@@ -61,7 +64,7 @@ const Tab = () => {
                 Ut nulla tellus, eleifend euismod pellentesque vel, sagittis vel
                 justo
               </li>
-            </ul>
+            </ul> */}
           </div>
         </div>
       </TabPane>

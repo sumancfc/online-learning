@@ -20,6 +20,7 @@ const CourseSection = ({ courses }) => {
                   <Link href={`/courses/${course.slug}`}>
                     {course.image && (
                       <img
+                        loading='lazy'
                         src={course.image.Location}
                         alt={course.name}
                         className='w-100 object-fit-cover'
@@ -44,7 +45,9 @@ const CourseSection = ({ courses }) => {
                       <small>{course.lessons.length} Lessons</small>
                     </p>
                     <p className='lead'>
-                      <strong>${course.price}</strong>
+                      <strong>
+                        {course.paid ? `$${course.price}` : "Free"}
+                      </strong>
                     </p>
                   </div>
                   <div className='row'>

@@ -1,24 +1,24 @@
-import BreadCrumb from "@/components/Breadcrumb";
-import Tab from "@/components/Tabs";
+import HtmlHead from "@/components/Head";
+import CourseSection from "@/components/Home/CourseSection";
+import axios from "axios";
+import { useState, useEffect } from "react";
 
 const Courses = () => {
+  const [courses, setCourses] = useState([]);
+
+  useEffect(() => {
+    allCourses();
+  }, []);
+
+  //get all courses
+  const allCourses = async () => {
+    const { data } = await axios.get("/api/v1/course/all");
+    setCourses(data);
+  };
   return (
     <>
-      <BreadCrumb courseName='Learn User Interface and User Experience' />
-      <div className='course-single-section my-5'>
-        <div className='container'>
-          <div className='row'>
-            <div className='col-md-8'>
-              <Tab />
-            </div>
-            <div className='col-md-4 position-relative'>
-              <div className=''>
-                <img src='/img/about-img.jpg' className='mw-100' />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <HtmlHead title='Courses - Online Learning Platform' />
+      <CourseSection courses={courses} />
     </>
   );
 };
