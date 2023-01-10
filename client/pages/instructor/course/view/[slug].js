@@ -221,7 +221,7 @@ const ViewCourse = ({ courseaaa }) => {
 
 export async function getServerSideProps(context) {
   const { slug } = context.params; // Use `context.params` to get dynamic params
-  const res = await fetch(`http://localhost:3000/api/v1/course/${slug}`);
+  const res = await fetch(`${process.env.BACKEND_API}/course/${slug}`);
   const courseaaa = await res.json();
 
   return { props: { courseaaa } };
