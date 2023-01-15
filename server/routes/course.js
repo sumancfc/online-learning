@@ -16,6 +16,8 @@ const {
   deleteLessonFromCourse,
   publishYourCourse,
   unpublishYourCourse,
+  checkCourseEnrollment,
+  freeCourseEnrollment,
 } = require("../controllers/course");
 const { requireSignin, isInstructor } = require("../middlewares");
 
@@ -59,5 +61,17 @@ router.put(
   updateLessonToCourse
 );
 router.put("/course/:slug/:lesson", requireSignin, deleteLessonFromCourse);
+
+//user enroll to couse
+router.get(
+  "/course/enrollment-check/:courseId",
+  requireSignin,
+  checkCourseEnrollment
+);
+router.post(
+  "/course/enrollment-free/:courseId",
+  requireSignin,
+  freeCourseEnrollment
+);
 
 module.exports = router;

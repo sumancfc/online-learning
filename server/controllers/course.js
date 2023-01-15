@@ -3,6 +3,7 @@ const AWS = require("aws-sdk");
 const { nanoid } = require("nanoid");
 const slugify = require("slugify");
 const Course = require("../models/course");
+const User = require("../models/user");
 
 const awsConfig = {
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -333,5 +334,52 @@ exports.unpublishYourCourse = async (req, res) => {
   } catch (err) {
     console.log(err);
     return res.status(400).json({ error: "Course Failed to Unpublish." });
+  }
+};
+
+// check if user is enrolled in course
+exports.checkCourseEnrollment = async (req, res) => {
+  try {
+    const { courseId } = req.params;
+
+    const user = await User.findById(req.user._id).exec();
+
+    let userCourseids = [];
+    let length = user.courses && user.courses.length;
+
+    for (let i = 0; i < length; i++) {
+      userCourseids.push(user.courses[i].toString());
+    }
+
+    res.json({
+      status: userCourseids.includes(courseId),
+      course: await Course.findById(courseId).exec(),
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({ error: "Failed to Get Enrollment Data" });
+  }
+};
+
+// free course enrollment
+exports.freeCourseEnrollment = async (req, res) => {
+  try {
+    const { courseId } = req.params;
+    // check course free or not
+    const course = await Course.findById(courseId).exec();
+    if (course.paid) return;
+
+    await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        $addToSet: { courses: course._id },
+      },
+      { new: true }
+    ).exec();
+
+    res.json(course);
+  } catch (err) {
+    console.log("free enrollment err", err);
+    return res.status(400).json({ error: "Failed to Enrollment" });
   }
 };

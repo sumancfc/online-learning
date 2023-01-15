@@ -1,4 +1,6 @@
-import { useContext, useState } from "react";
+import { useState, useEffect, useContext } from "react";
+import { useRouter } from "next/router";
+import axios from "axios";
 import BreadCrumb from "@/components/Breadcrumb";
 import Tab from "@/components/Tabs";
 import { Context } from "@/context/index";
@@ -9,10 +11,49 @@ import VideoPreview from "@/components/Course/VideoPreview";
 const Courses = ({ course }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [videoPreview, setVideoPreview] = useState("");
+  const [enrolledCourse, setEnrolledCourse] = useState({});
 
   const {
     state: { user },
   } = useContext(Context);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    user && course && checkCourseEnrolled();
+  }, [user, course]);
+
+  const checkCourseEnrolled = async () => {
+    try {
+      const { data } = await axios.get(
+        `/api/v1/course/enrollment-check/${course._id}`
+      );
+      setEnrolledCourse(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  console.log(enrolledCourse);
+  //handle free course
+  const freeCourseHandle = async (e) => {
+    e.preventDefault();
+    try {
+      if (!user) router.push("/login");
+      enrolledCourse.status &&
+        router.push(`/user/course/${enrolledCourse.course.slug}`);
+
+      const { data } = await axios.post(
+        `/api/v1/course/enrollment-free/${course._id}`
+      );
+
+      router.push(`/user/course/${data.course.slug}`);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  //habdle paid course
+  const paidCourseHandle = async (e) => {};
 
   return (
     <>
@@ -30,10 +71,15 @@ const Courses = ({ course }) => {
               />
             </div>
             <SingleCourseRight
+              user={user}
               course={course}
               modalOpen={modalOpen}
               setModalOpen={setModalOpen}
               setVideoPreview={setVideoPreview}
+              paidCourseHandle={paidCourseHandle}
+              freeCourseHandle={freeCourseHandle}
+              enrolledCourse={enrolledCourse}
+              setEnrolledCourse={setEnrolledCourse}
             />
           </div>
         </div>
