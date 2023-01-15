@@ -1,24 +1,49 @@
+import { useContext, useState } from "react";
 import BreadCrumb from "@/components/Breadcrumb";
 import Tab from "@/components/Tabs";
+import { Context } from "@/context/index";
+import HtmlHead from "@/components/Head";
+import SingleCourseRight from "@/components/Course/SingleCourseRight";
+import VideoPreview from "@/components/Course/VideoPreview";
 
 const Courses = ({ course }) => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [videoPreview, setVideoPreview] = useState("");
+
+  const {
+    state: { user },
+  } = useContext(Context);
+
   return (
     <>
+      <HtmlHead title={`${course.name} - Online Learning Platform`} />
       <BreadCrumb courseName={course.name} />
       <div className='course-single-section my-5'>
         <div className='container'>
           <div className='row'>
             <div className='col-md-8'>
-              <Tab course={course} />
+              <Tab
+                course={course}
+                modalOpen={modalOpen}
+                setModalOpen={setModalOpen}
+                setVideoPreview={setVideoPreview}
+              />
             </div>
-            <div className='col-md-4 position-relative'>
-              <div className=''>
-                <img src='/img/about-img.jpg' className='mw-100' />
-              </div>
-            </div>
+            <SingleCourseRight
+              course={course}
+              modalOpen={modalOpen}
+              setModalOpen={setModalOpen}
+              setVideoPreview={setVideoPreview}
+            />
           </div>
         </div>
       </div>
+
+      <VideoPreview
+        modalOpen={modalOpen}
+        setModalOpen={setModalOpen}
+        videoPreview={videoPreview}
+      />
     </>
   );
 };
