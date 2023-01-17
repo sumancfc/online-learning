@@ -18,8 +18,10 @@ const {
   unpublishYourCourse,
   checkCourseEnrollment,
   freeCourseEnrollment,
+  getUserCourse,
+  getUserCourseBySlug,
 } = require("../controllers/course");
-const { requireSignin, isInstructor } = require("../middlewares");
+const { requireSignin, isInstructor, userEnrolled } = require("../middlewares");
 
 router.get("/course/all", getCourses);
 
@@ -40,6 +42,14 @@ router.post(
   videoRemoveFromAWS
 );
 
+//get user's course
+router.get("/course/user-course", requireSignin, getUserCourse);
+router.get(
+  "/course/user/:slug",
+  requireSignin,
+  userEnrolled,
+  getUserCourseBySlug
+);
 // course routes
 router.post("/course/create", requireSignin, isInstructor, createCourse);
 router.get("/course/:slug", getCourseBySlug);
@@ -62,7 +72,7 @@ router.put(
 );
 router.put("/course/:slug/:lesson", requireSignin, deleteLessonFromCourse);
 
-//user enroll to couse
+//user enroll to course
 router.get(
   "/course/enrollment-check/:courseId",
   requireSignin,

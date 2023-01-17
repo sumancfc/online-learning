@@ -180,7 +180,7 @@ exports.getCourseBySlug = async (req, res) => {
     return res.status(200).json(course);
   } catch (err) {
     console.log(err);
-    return res.status(400).json({ error: "Course Failed To Create" });
+    return res.status(400).json({ error: "Failed To Get Single Course" });
   }
 };
 
@@ -351,7 +351,7 @@ exports.checkCourseEnrollment = async (req, res) => {
       userCourseids.push(user.courses[i].toString());
     }
 
-    res.json({
+    return res.json({
       status: userCourseids.includes(courseId),
       course: await Course.findById(courseId).exec(),
     });
@@ -377,9 +377,41 @@ exports.freeCourseEnrollment = async (req, res) => {
       { new: true }
     ).exec();
 
-    res.json(course);
+    return res.json(course);
   } catch (err) {
-    console.log("free enrollment err", err);
+    console.log(err);
     return res.status(400).json({ error: "Failed to Enrollment" });
+  }
+};
+
+//get user's course
+exports.getUserCourse = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).exec();
+
+    const courses = await Course.find({ _id: { $in: user.courses } })
+      .populate("instructor", "_id name")
+      .populate("category", "_id name")
+      .exec();
+
+    return res.json(courses);
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({ error: "Failed to Get User Courses" });
+  }
+};
+
+//get user's single course
+exports.getUserCourseBySlug = async (req, res) => {
+  try {
+    const course = await Course.findOne({ slug: req.params.slug })
+      .populate("instructor", "_id name")
+      .populate("category", "name")
+      .exec();
+
+    return res.status(200).json(course);
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({ error: "Failed To Get Single Course" });
   }
 };
