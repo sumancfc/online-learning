@@ -1,6 +1,6 @@
 const expressJwt = require("express-jwt");
-const User = require("../models/user");
-const Course = require("../models/course");
+const User = require("../models/userModel");
+const Course = require("../models/courseModel");
 
 exports.requireSignin = expressJwt({
   getToken: (req, res) => req.cookies.token,
