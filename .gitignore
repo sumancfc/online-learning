@@ -117,3 +117,8 @@ dist
 
 # Remove product media
 products/public/media/
+
+.vscode
+.idea
+.DS_Store
+
